@@ -40,7 +40,7 @@ public class MyAdapter extends BaseAdapter {
         return tracksList.size();
     }
 
-    // элемент по позиции
+    // элемент по позицииggg
     @Override
     public Track getItem(int position) {
         return tracksList.get(position);
