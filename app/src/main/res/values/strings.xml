@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="check">90</string>
+    <string name="count">4</string>
+    <string name="slash">/</string>
+    <string name="tap">TAP TEMP</string>
+    <string name="start">START</string>
+    <string name="stop">STOP</string>
+    <string name="On">ACCENT ON</string>
+    <string name="Off">ACCENT OFF</string>
+    <string name="plus1">+1</string>
+    <string name="plus5">+5</string>
+    <string name="plus10">+10</string>
+    <string name="minus1">-1</string>
+    <string name="minus5">-5</string>
+    <string name="minus10">-10</string>
+    <string name="saveL">Save in list</string>
+    <string name="metronom">player</string>
+    <string name="list">LIST</string>
+    <string name="balaberda">gjfjdhjnfgjfjdhjnfgfgjfjdhjnfgjfjdhjnfgjfjdhjnfgjfjdhjnfgfgjfjdhjnfgjfjdhjnf</string>
+    <string name="_136">136</string>
+    <string name="accent_on">Accent:On</string>
+</resources>
