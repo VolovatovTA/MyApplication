@@ -1,8 +1,8 @@
 package com.example.myapplication;
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,19 +20,28 @@ import com.example.myapplication.ui.main.Track;
 import java.util.ArrayList;
 
 public class MyAdapter extends BaseAdapter {
-    Context ctx;
     LayoutInflater lInflater;
     ArrayList<Track> tracksList;
     DBHelper dbHelper;
     SQLiteDatabase db;
-    ContentValues cv;
+    boolean isSelectionMode;
 
-    MyAdapter(Context context, ArrayList<Track> tracksList_) {
+    public MyAdapter(Context context, ArrayList<Track> tracksList_) {
         lInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        isSelectionMode = false;
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
-        cv = new ContentValues();}
+        Cursor cursor = db.query(DBHelper.TABLE_TRACKS, null,null,null,null,null, null);
+        if (cursor.getCount() != 0){
+            for (int i = 0; i < cursor.getCount(); i++) {
+                Track track = new Track(cursor.getString(cursor.getColumnIndex(DBHelper.KEY_NAME)), cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_TEMP)), cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_ACCENT)) == 1, cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_COUNT1)),cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_COUNT2)), cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_ID)));
+                tracksList_.add(track);
+            }
+        }
+        cursor.close();
+
+    }
 
     // кол-во элементов
     @Override
@@ -65,7 +74,7 @@ public class MyAdapter extends BaseAdapter {
 
         // заполняем View в пункте списка данными из треков: наименование, темп, размер такта
 
-        ((TextView) view.findViewById(R.id.tvName)).setText(t.n);
+        ((TextView) view.findViewById(R.id.tvName)).setText(t.name);
         ((TextView) view.findViewById(R.id.tvTemp)).setText(t.temp + "");
         ((TextView) view.findViewById(R.id.tvCount1)).setText(t.count1 + "");
         ((TextView) view.findViewById(R.id.tvCount2)).setText(t.count2 + "");
@@ -74,7 +83,7 @@ public class MyAdapter extends BaseAdapter {
         else ((TextView) view.findViewById(R.id.tvAccent)).setText("Accent: Off");
 
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.cbBox);
-        if (Library.isSelectionMode) {
+        if (isSelectionMode) {
             LinearLayout.LayoutParams params_for_chBox = (LinearLayout.LayoutParams) checkBox.getLayoutParams();;
             params_for_chBox.width = 51;
             params_for_chBox.leftMargin = 15;
@@ -93,20 +102,16 @@ public class MyAdapter extends BaseAdapter {
         // пишем позицию
         checkBox.setTag(position);
         // заполняем данными из товаров: в корзине или нет
-        checkBox.setChecked(t.box);
+        checkBox.setChecked(t.acc);
         return view;
     }
-
-
-
 
 
     // обработчик для чекбоксов
     OnCheckedChangeListener myCheckChangeList = new OnCheckedChangeListener() {
         public void onCheckedChanged(CompoundButton buttonView,
                                      boolean isChecked) {
-            // меняем данные трека
-            getTrack((Integer) buttonView.getTag()).box = isChecked;
+            //getTrack((Integer) buttonView.getTag()).box = isChecked;
         }
     };
 }

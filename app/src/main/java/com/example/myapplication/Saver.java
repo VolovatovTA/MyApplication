@@ -12,10 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import com.example.metronom.DBHelper;
-import android.widget.Switch;
 
-import com.example.myapplication.R;
+import com.example.myapplication.ui.main.DBHelper;
 
 public class Saver extends AppCompatActivity implements View.OnClickListener {
     String TAG = "lifecycle111";
@@ -44,8 +42,6 @@ public class Saver extends AppCompatActivity implements View.OnClickListener {
         Log.d(TAG, freq + "");
 
         name = findViewById(R.id.Name);
-
-
         save = findViewById(R.id.saveLIST);
         save.setOnClickListener(this);
 
@@ -61,9 +57,7 @@ public class Saver extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View view) {
 
         String name_of_track = name.getText().toString();
-
         SQLiteDatabase database = dbHelper.getWritableDatabase();
-
         ContentValues contentValues = new ContentValues();
 
         if (view.getId() == R.id.saveLIST){

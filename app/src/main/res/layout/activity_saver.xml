@@ -25,7 +25,8 @@
         android:layout_marginEnd="8dp"
         android:text="@string/saveL"
         app:layout_constraintEnd_toEndOf="@+id/Name"
-        app:layout_constraintTop_toBottomOf="@+id/Name" />
+        app:layout_constraintTop_toBottomOf="@+id/Name"
+        android:layout_marginRight="8dp" />
 
     <Button
         android:id="@+id/cancel_button"
@@ -46,7 +47,8 @@
         app:layout_constraintBottom_toTopOf="@+id/Name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.461"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center_horizontal" />
 
 
 

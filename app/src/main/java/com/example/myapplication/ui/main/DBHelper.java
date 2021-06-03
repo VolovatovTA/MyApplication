@@ -12,7 +12,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static  final  String DATABASE_NAME = "List";
     public static  final  String TABLE_TRACKS = "tracks";
 
-    public static final String KEY_ID = "_id";
+    public static final String KEY_ID = "id";
     public static final String KEY_NAME = "name";
     public static final String KEY_TEMP = "tempo";
     public static final String KEY_COUNT1 = "count1";

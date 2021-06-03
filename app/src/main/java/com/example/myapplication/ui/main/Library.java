@@ -1,4 +1,4 @@
-package com.example.metronom;
+package com.example.myapplication.ui.main;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -20,6 +20,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+
+import com.example.myapplication.MainActivity;
+import com.example.myapplication.MyAdapter;
+import com.example.myapplication.R;
 
 import java.util.ArrayList;
 
@@ -44,17 +48,15 @@ public class Library extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main3);
+        setContentView(R.layout.fragment_list);
 
         Log.d(TAG, "MainActivity3 onCreate");
 
         lvList = findViewById(R.id.lvList);
         dbHelper = new DBHelper(this);
-
-        SQLiteDatabase database = (dbHelper).getWritableDatabase();
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        SQLiteDatabase database = (dbHelper).getWritableDatabase();
 
         cursor = database.query(DBHelper.TABLE_TRACKS, null, null, null, null, null, null);
         // create List
@@ -231,7 +233,7 @@ public class Library extends AppCompatActivity {
             tracks = new ArrayList<>(cursor.getCount());
 
             for (int i = 0; i < cursor.getCount(); i++) {
-                Track t = new Track(names[i], temp[i], acc[i], count1[i], count2[i],  i, false, ides[i]);
+                Track t = new Track(names[i], temp[i], acc[i], count1[i], count2[i], ides[i]);
                 tracks.add(t);
             }
 
@@ -240,7 +242,7 @@ public class Library extends AppCompatActivity {
     public int getCheckedCount(ArrayList<Track> t){
         int count = 0;
         for (int i = 0; i < t.size(); i++){
-            if (t.get(i).box) count++;
+            if (t.get(i).acc) count++;
         }
         return count;
     }
@@ -249,7 +251,7 @@ public class Library extends AppCompatActivity {
         int[] ides = new int[getCheckedCount(t)];
 
         for (int i = 0; i < t.size(); i++){
-            if (t.get(i).box) {
+            if (t.get(i).acc) {
                 ides[count_current] = t.get(i).id;
                 count_current++;
             }
