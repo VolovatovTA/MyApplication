@@ -1,23 +1,31 @@
 package com.example.myapplication.ui.main;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 
@@ -27,7 +35,7 @@ import com.example.myapplication.R;
 
 import java.util.ArrayList;
 
-public class Library extends AppCompatActivity {
+public class Library extends Fragment {
 
     String TAG = "lifecycle111";
     DBHelper dbHelper;
@@ -44,18 +52,13 @@ public class Library extends AppCompatActivity {
     ArrayList<Track> tracks;
     Cursor cursor;
     MyAdapter myAdapter;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_list);
-
-        Log.d(TAG, "MainActivity3 onCreate");
-
-        lvList = findViewById(R.id.lvList);
-        dbHelper = new DBHelper(this);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_list, null);
+        lvList = rootView.findViewById(R.id.lvList);
+        dbHelper = new DBHelper(getContext());
+        Toolbar toolbar = rootView.findViewById(R.id.toolbar);
         SQLiteDatabase database = (dbHelper).getWritableDatabase();
 
         cursor = database.query(DBHelper.TABLE_TRACKS, null, null, null, null, null, null);
@@ -63,45 +66,34 @@ public class Library extends AppCompatActivity {
         CreateTrack();
 
 
-        myAdapter = new MyAdapter(this, tracks);
+        myAdapter = new MyAdapter(getContext(), tracks);
 
         lvList.setAdapter(myAdapter);
         lvList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-            lvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-                public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id) {
-                    if (!isSelectionMode) {
-                        Log.d(TAG, "itemClick: position = " + position + ", id = " + id);
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                if (!isSelectionMode) {
+                    Log.d(TAG, "itemClick: position = " + position + ", id = " + id);
 
 
-                        Intent intent = new Intent(Library.this, MainActivity.class);
+SectionsPagerAdapter spa = new
+                    intent.putExtra("name", tracks.get(position).name);
+                    intent.putExtra("temp",  tracks.get(position).temp);
+                    intent.putExtra("acc",  tracks.get(position).acc);
+                    intent.putExtra("count1",  tracks.get(position).count1);
+                    intent.putExtra("count2",  tracks.get(position).count2);
+                    startActivity(intent);
 
-                            intent.putExtra("name", tracks.get(position).name);
-                            intent.putExtra("temp",  tracks.get(position).temp);
-                            intent.putExtra("acc",  tracks.get(position).acc);
-                            intent.putExtra("count1",  tracks.get(position).count1);
-                            intent.putExtra("count2",  tracks.get(position).count2);
-                            startActivity(intent);
-
-                    }
                 }
-            });
-        }
-        /*lvList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-
             }
+        });
+    }
+                return rootView;
+    }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                isSelectionMode = false;
-
-            }
-
-        });*/
 
 
 
@@ -114,7 +106,7 @@ public class Library extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == 1) {
             isSelectionMode = true;
-            Animation animation = AnimationUtils.loadAnimation(this, R.anim.scale);
+            Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.scale);
 
             for (int i = 0; i < lvList.getChildCount(); i++){
                 View view = ((LinearLayout)lvList.getChildAt(i));

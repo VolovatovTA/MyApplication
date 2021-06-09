@@ -38,13 +38,14 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         tabs.setupWithViewPager(viewPager);
 
 
+
     }
 
     @Override
     protected void onStart() {
-        Intent intent = new Intent(this, MetronomeService.class);
-        startService(intent);
-        bindService(intent, this, Context.BIND_AUTO_CREATE);
+//        Intent intent = new Intent(this, MetronomeService.class);
+//        startService(intent);
+//        bindService(intent, this, Context.BIND_AUTO_CREATE);
         super.onStart();
 
     }
@@ -57,9 +58,9 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     @Override
     public void onServiceConnected(ComponentName name, IBinder iBinder) {
         Log.d("startCommand","Service is Connected");
-        MetronomeService.LocalBinder binder = (MetronomeService.LocalBinder) iBinder;
-        service = binder.getService();
-        service.play();
+//        MetronomeService.LocalBinder binder = (MetronomeService.LocalBinder) iBinder;
+//        service = binder.getService();
+//        service.play();
     }
 
     @Override
