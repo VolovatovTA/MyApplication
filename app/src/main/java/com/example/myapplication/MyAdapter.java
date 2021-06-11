@@ -22,24 +22,14 @@ import java.util.ArrayList;
 public class MyAdapter extends BaseAdapter {
     LayoutInflater lInflater;
     ArrayList<Track> tracksList;
-    DBHelper dbHelper;
-    SQLiteDatabase db;
     boolean isSelectionMode;
 
     public MyAdapter(Context context, ArrayList<Track> tracksList_) {
         lInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         isSelectionMode = false;
-        dbHelper = new DBHelper(context);
-        db = dbHelper.getWritableDatabase();
-        Cursor cursor = db.query(DBHelper.TABLE_TRACKS, null,null,null,null,null, null);
-        if (cursor.getCount() != 0){
-            for (int i = 0; i < cursor.getCount(); i++) {
-                Track track = new Track(cursor.getString(cursor.getColumnIndex(DBHelper.KEY_NAME)), cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_TEMP)), cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_ACCENT)) == 1, cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_COUNT1)),cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_COUNT2)), cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_ID)));
-                tracksList_.add(track);
-            }
-        }
-        cursor.close();
+        tracksList = tracksList_;
+
 
     }
 
@@ -49,7 +39,7 @@ public class MyAdapter extends BaseAdapter {
         return tracksList.size();
     }
 
-    // элемент по позицииggg
+    // элемент по позиции
     @Override
     public Track getItem(int position) {
         return tracksList.get(position);
@@ -83,15 +73,16 @@ public class MyAdapter extends BaseAdapter {
         else ((TextView) view.findViewById(R.id.tvAccent)).setText("Accent: Off");
 
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.cbBox);
+        LinearLayout.LayoutParams params_for_chBox = (LinearLayout.LayoutParams) checkBox.getLayoutParams();
         if (isSelectionMode) {
-            LinearLayout.LayoutParams params_for_chBox = (LinearLayout.LayoutParams) checkBox.getLayoutParams();;
+            ;
             params_for_chBox.width = 51;
             params_for_chBox.leftMargin = 15;
             checkBox.setLayoutParams(params_for_chBox);
             checkBox.setVisibility(View.VISIBLE);
         }
         else {
-            LinearLayout.LayoutParams params_for_chBox = (LinearLayout.LayoutParams) checkBox.getLayoutParams();;
+            ;
             params_for_chBox.width = 1;
             params_for_chBox.leftMargin = 15;
             checkBox.setLayoutParams(params_for_chBox);
@@ -101,7 +92,7 @@ public class MyAdapter extends BaseAdapter {
         checkBox.setOnCheckedChangeListener(myCheckChangeList);
         // пишем позицию
         checkBox.setTag(position);
-        // заполняем данными из товаров: в корзине или нет
+        // отмечаем
         checkBox.setChecked(t.acc);
         return view;
     }

@@ -1,41 +1,36 @@
 package com.example.myapplication.ui.main;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SeekBar;
 import android.widget.Toast;
 
 
-import com.example.myapplication.MainActivity;
+import com.example.myapplication.DataController;
 import com.example.myapplication.MyAdapter;
 import com.example.myapplication.R;
+import com.example.myapplication.Saver;
 
 import java.util.ArrayList;
 
-public class Library extends Fragment {
+public class FragmentLibrary extends Fragment {
 
     String TAG = "lifecycle111";
     DBHelper dbHelper;
@@ -52,18 +47,19 @@ public class Library extends Fragment {
     ArrayList<Track> tracks;
     Cursor cursor;
     MyAdapter myAdapter;
+    View rootView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_list, null);
+        rootView = inflater.inflate(R.layout.fragment_list, null);
         lvList = rootView.findViewById(R.id.lvList);
         dbHelper = new DBHelper(getContext());
         Toolbar toolbar = rootView.findViewById(R.id.toolbar);
         SQLiteDatabase database = (dbHelper).getWritableDatabase();
 
         cursor = database.query(DBHelper.TABLE_TRACKS, null, null, null, null, null, null);
-        // create List
-        CreateTrack();
+        CreateTrackList();
 
 
         myAdapter = new MyAdapter(getContext(), tracks);
@@ -79,30 +75,25 @@ public class Library extends Fragment {
                     Log.d(TAG, "itemClick: position = " + position + ", id = " + id);
 
 
-SectionsPagerAdapter spa = new
-                    intent.putExtra("name", tracks.get(position).name);
-                    intent.putExtra("temp",  tracks.get(position).temp);
-                    intent.putExtra("acc",  tracks.get(position).acc);
-                    intent.putExtra("count1",  tracks.get(position).count1);
-                    intent.putExtra("count2",  tracks.get(position).count2);
-                    startActivity(intent);
+
+//                    intent.putExtra("name", tracks.get(position).name);
+//                    intent.putExtra("temp",  tracks.get(position).temp);
+//                    intent.putExtra("acc",  tracks.get(position).acc);
+//                    intent.putExtra("count1",  tracks.get(position).count1);
+//                    intent.putExtra("count2",  tracks.get(position).count2);
+//                    startActivity(intent);
 
                 }
             }
         });
+        return rootView;
     }
-                return rootView;
-    }
 
 
 
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, 1, 1, "Choose");
-        menu.add(1, 2, 0, "Delete");
-        menu.add(1, 3, 0, "Paste in List");
-        return super.onCreateOptionsMenu(menu);
-    }
+
+
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == 1) {
             isSelectionMode = true;
@@ -124,7 +115,7 @@ SectionsPagerAdapter spa = new
 
         } else if (item.getItemId() == 2) {
             isSelectionMode = false;
-            Animation animation = AnimationUtils.loadAnimation(this, R.anim.scale1);
+            Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.scale1);
 
             for (int i = 0; i < lvList.getChildCount(); i++){
                 View view = ((LinearLayout)lvList.getChildAt(i));
@@ -135,9 +126,8 @@ SectionsPagerAdapter spa = new
             }
 
             SQLiteDatabase database = (dbHelper).getWritableDatabase();
-            int count = DeleteSomeItems(findViewById(R.id.toolbar), database);
+            int count = DeleteSomeItems(rootView.findViewById(R.id.toolbar), database);
             if (count != 0) {
-                myAdapter.notifyDataSetChanged();
             }
 
         }
@@ -146,12 +136,31 @@ SectionsPagerAdapter spa = new
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // пункты меню с ID группы = 1 видны, если выбран режим редактирования
-        menu.setGroupVisible(1, isSelectionMode);
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "FragLib onResume ");
+        LiveData<Track> PleaseChangeTrackList = Saver.getData();
+        Log.d(TAG, "Последний трек - " + count_of_tracks );
 
-        return super.onPrepareOptionsMenu(menu);
+        CreateTrackList();
+        Log.d(TAG, "Последний трек - " + count_of_tracks );
+
+        PleaseChangeTrackList.observe(getActivity(), new Observer<Track>() {
+            @Override
+            public void onChanged(Track track) {
+                myAdapter.notifyDataSetChanged();
+
+            }
+        });
     }
+
+    //    @Override
+//    public boolean onPrepareOptionsMenu(Menu menu) {
+//        // пункты меню с ID группы = 1 видны, если выбран режим редактирования
+//        menu.setGroupVisible(1, isSelectionMode);
+//
+//        return super.onPrepareOptionsMenu(menu);
+//    }
     public int DeleteSomeItems(View v, SQLiteDatabase _database) {
         int result = getCheckedCount(tracks);
         SQLiteDatabase database = (dbHelper).getWritableDatabase();
@@ -167,16 +176,16 @@ SectionsPagerAdapter spa = new
 
 
         if (result == 0){
-            Toast.makeText(this, "Ни одной записи не было удалено", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Ни одной записи не было удалено", Toast.LENGTH_LONG).show();
 
         } else if (result == 1){
-            Toast.makeText(this, "Была удалена " + result + " запись", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Была удалена " + result + " запись", Toast.LENGTH_LONG).show();
 
         } else if (result < 5 & result > 1){
-            Toast.makeText(this, "Было удалено " + result + " записи", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Было удалено " + result + " записи", Toast.LENGTH_LONG).show();
 
         } else if (result > 5){
-            Toast.makeText(this, "Было удалено " + result + " записей", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Было удалено " + result + " записей", Toast.LENGTH_LONG).show();
 
         }
         cursor.close();
@@ -189,25 +198,19 @@ SectionsPagerAdapter spa = new
         }
         return fended_id;
     }
-    public void CreateTrack() {
+    public void CreateTrackList() {
         if (cursor.moveToLast()) {
             count_of_tracks = cursor.getCount();
-            names = new String[count_of_tracks];
-            acc = new boolean[count_of_tracks];
-            count1 = new int[count_of_tracks];
-            count2 = new int[count_of_tracks];
-            temp = new int[count_of_tracks];
-            ides = new int[count_of_tracks];
 
         } else {
             count_of_tracks = 1;
-            names = new String[count_of_tracks];
-            acc = new boolean[count_of_tracks];
-            count1 = new int[count_of_tracks];
-            count2 = new int[count_of_tracks];
-            temp = new int[count_of_tracks];
-            ides = new int[count_of_tracks];
         }
+        names = new String[count_of_tracks];
+        acc = new boolean[count_of_tracks];
+        count1 = new int[count_of_tracks];
+        count2 = new int[count_of_tracks];
+        temp = new int[count_of_tracks];
+        ides = new int[count_of_tracks];
 
 
         if (cursor.moveToFirst()) {

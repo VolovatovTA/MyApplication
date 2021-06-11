@@ -107,10 +107,10 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        Toast.makeText(getActivity(), "Вы нажали на кнопку",
-                Toast.LENGTH_SHORT).show();
+
         switch (buttonView.getId()){
             case R.id.play:
+
 
                 break;
             case R.id.accent:
