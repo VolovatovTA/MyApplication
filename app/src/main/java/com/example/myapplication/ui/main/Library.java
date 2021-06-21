@@ -7,9 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +35,8 @@ import android.widget.Toast;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.MyAdapter;
 import com.example.myapplication.R;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -79,12 +84,11 @@ public class Library extends Fragment {
                     Log.d(TAG, "itemClick: position = " + position + ", id = " + id);
 
 
-SectionsPagerAdapter spa = new
                     intent.putExtra("name", tracks.get(position).name);
-                    intent.putExtra("temp",  tracks.get(position).temp);
-                    intent.putExtra("acc",  tracks.get(position).acc);
-                    intent.putExtra("count1",  tracks.get(position).count1);
-                    intent.putExtra("count2",  tracks.get(position).count2);
+                    intent.putExtra("temp", tracks.get(position).temp);
+                    intent.putExtra("acc", tracks.get(position).acc);
+                    intent.putExtra("count1", tracks.get(position).count1);
+                    intent.putExtra("count2", tracks.get(position).count2);
                     startActivity(intent);
 
                 }

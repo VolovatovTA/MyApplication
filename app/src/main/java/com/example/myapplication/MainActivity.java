@@ -22,21 +22,22 @@ import com.example.myapplication.ui.main.SectionsPagerAdapter;
 public class MainActivity extends AppCompatActivity implements ServiceConnection {
 
     MetronomeService service;
+    SectionsPagerAdapter sectionsPagerAdapter;
     int i = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
 
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
 
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-
 
 
     }
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder iBinder) {
-        Log.d("startCommand","Service is Connected");
+        Log.d("startCommand", "Service is Connected");
 //        MetronomeService.LocalBinder binder = (MetronomeService.LocalBinder) iBinder;
 //        service = binder.getService();
 //        service.play();
