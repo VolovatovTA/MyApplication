@@ -1,6 +1,9 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -14,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.myapplication.ui.main.DBHelper;
+import com.example.myapplication.ui.main.Track;
 
 public class Saver extends AppCompatActivity implements View.OnClickListener {
     String TAG = "lifecycle111";
@@ -56,6 +60,8 @@ public class Saver extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
 
+
+
         String name_of_track = name.getText().toString();
         SQLiteDatabase database = dbHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -96,5 +102,11 @@ public class Saver extends AppCompatActivity implements View.OnClickListener {
             cursor.close();
             this.finish();
         }
+    }
+    public static LiveData<Track> getData() {
+        MutableLiveData<Track> liveData = new MutableLiveData<>();
+
+        liveData.setValue(new Track("ss", 1, false, 1, 1, 1));
+        return liveData;
     }
 }
