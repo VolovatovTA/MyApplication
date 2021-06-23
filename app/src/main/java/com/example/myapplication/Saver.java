@@ -83,23 +83,23 @@ public class Saver extends AppCompatActivity implements View.OnClickListener {
             this.finish();
         }
         else if (view.getId() == R.id.cancel_button) {
-            @SuppressLint("Recycle") Cursor cursor = database.query(DBHelper.TABLE_TRACKS, null,null, null, null, null,null);
-
-            if (cursor.moveToFirst()){
-                int idIndex = cursor.getColumnIndex(DBHelper.KEY_ID);
-                int nameIndex = cursor.getColumnIndex(DBHelper.KEY_NAME);
-                int tempIndex = cursor.getColumnIndex(DBHelper.KEY_TEMP);
-                do {
-                    Log.d(TAG, "id = " + cursor.getString(idIndex) +
-                            ", name = " + cursor.getString(nameIndex) +
-                            ", temp = " + cursor.getString((tempIndex)));
-                } while (cursor.moveToNext());}
-
-            else {
-                Log.d(TAG, "Ничё нет");
-                dbHelper.close();
-            }
-            cursor.close();
+//            @SuppressLint("Recycle") Cursor cursor = database.query(DBHelper.TABLE_TRACKS, null,null, null, null, null,null);
+//
+//            if (cursor.moveToFirst()){
+//                int idIndex = cursor.getColumnIndex(DBHelper.KEY_ID);
+//                int nameIndex = cursor.getColumnIndex(DBHelper.KEY_NAME);
+//                int tempIndex = cursor.getColumnIndex(DBHelper.KEY_TEMP);
+//                do {
+//                    Log.d(TAG, "id = " + cursor.getString(idIndex) +
+//                            ", name = " + cursor.getString(nameIndex) +
+//                            ", temp = " + cursor.getString((tempIndex)));
+//                } while (cursor.moveToNext());}
+//
+//            else {
+//                Log.d(TAG, "Ничё нет");
+//                dbHelper.close();
+//            }
+//            cursor.close();
             this.finish();
         }
     }

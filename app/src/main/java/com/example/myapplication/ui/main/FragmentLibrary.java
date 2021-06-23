@@ -51,6 +51,9 @@ public class FragmentLibrary extends Fragment {
     Cursor cursor;
     MyAdapter myAdapter;
     View rootView;
+    SQLiteDatabase database;
+    Toolbar toolbar;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,12 +61,11 @@ public class FragmentLibrary extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_list, null);
         lvList = rootView.findViewById(R.id.lvList);
         dbHelper = new DBHelper(getContext());
-        Toolbar toolbar = rootView.findViewById(R.id.toolbar);
-        SQLiteDatabase database = (dbHelper).getWritableDatabase();
+        toolbar = rootView.findViewById(R.id.toolbar);
+        database = (dbHelper).getWritableDatabase();
 
         cursor = database.query(DBHelper.TABLE_TRACKS, null, null, null, null, null, null);
         CreateTrackList();
-
 
         myAdapter = new MyAdapter(getContext(), tracks);
 
@@ -78,8 +80,6 @@ public class FragmentLibrary extends Fragment {
                     Log.d(TAG, "itemClick: position = " + position + ", id = " + id);
 
 
-
-
 //                    intent.putExtra("name", tracks.get(position).name);
 //                    intent.putExtra("temp",  tracks.get(position).temp);
 //                    intent.putExtra("acc",  tracks.get(position).acc);
@@ -92,10 +92,6 @@ public class FragmentLibrary extends Fragment {
         });
         return rootView;
     }
-
-
-
-
 
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -131,8 +127,6 @@ public class FragmentLibrary extends Fragment {
 
             SQLiteDatabase database = (dbHelper).getWritableDatabase();
             int count = DeleteSomeItems(rootView.findViewById(R.id.toolbar), database);
-            if (count != 0) {
-            }
 
         }
 
@@ -143,19 +137,19 @@ public class FragmentLibrary extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "FragLib onResume ");
-        LiveData<Track> PleaseChangeTrackList = Saver.getData();
-        Log.d(TAG, "Последний трек - " + count_of_tracks );
+
+        cursor = database.query(DBHelper.TABLE_TRACKS, null, null, null, null, null, null);
+
+        Log.d(TAG, "Последний трек - " + cursor.getCount() );
 
         CreateTrackList();
-        Log.d(TAG, "Последний трек - " + count_of_tracks );
+        Log.d(TAG, "Последний трек - " + count_of_tracks);
+        if (tracks != null){
+            myAdapter.updateList(tracks);
+        }
 
-        PleaseChangeTrackList.observe(getActivity(), new Observer<Track>() {
-            @Override
-            public void onChanged(Track track) {
-                myAdapter.notifyDataSetChanged();
 
-            }
-        });
+
     }
 
     //    @Override
@@ -167,8 +161,7 @@ public class FragmentLibrary extends Fragment {
 //    }
     public int DeleteSomeItems(View v, SQLiteDatabase _database) {
         int result = getCheckedCount(tracks);
-        SQLiteDatabase database = (dbHelper).getWritableDatabase();
-        cursor = database.query(DBHelper.TABLE_TRACKS, null, null, null, null, null, null);
+        cursor = _database.query(DBHelper.TABLE_TRACKS, null, null, null, null, null, null);
 
         int[] ides = getCheckedIdes(tracks);
         for (int i = 0; i < result; i++){
@@ -196,19 +189,15 @@ public class FragmentLibrary extends Fragment {
         return  result;
     }
     private int getTrackById(ArrayList<Track> tracks, int id) {
-        int fended_id = 0;
+        int found_id = 0;
         for (int i = 0; i < tracks.size(); i++){
-            if (tracks.get(i).id == id) fended_id = i;
+            if (tracks.get(i).id == id) found_id = i;
         }
-        return fended_id;
+        return found_id;
     }
     public void CreateTrackList() {
-        if (cursor.moveToLast()) {
-            count_of_tracks = cursor.getCount();
+        count_of_tracks = cursor.getCount();
 
-        } else {
-            count_of_tracks = 1;
-        }
         names = new String[count_of_tracks];
         acc = new boolean[count_of_tracks];
         count1 = new int[count_of_tracks];
@@ -232,8 +221,7 @@ public class FragmentLibrary extends Fragment {
             tracks = new ArrayList<>(cursor.getCount());
 
             for (int i = 0; i < cursor.getCount(); i++) {
-                Track t = new Track(names[i], temp[i], acc[i], count1[i], count2[i], ides[i]);
-                tracks.add(t);
+                tracks.add(new Track(names[i], temp[i], acc[i], count1[i], count2[i], ides[i]));
             }
 
         }
@@ -258,6 +246,7 @@ public class FragmentLibrary extends Fragment {
 
         return ides;
     }
+
 
 }
 

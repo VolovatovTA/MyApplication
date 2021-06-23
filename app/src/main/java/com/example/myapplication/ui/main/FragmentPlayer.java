@@ -2,8 +2,11 @@ package com.example.myapplication.ui.main;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +14,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.Saver;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+
+import java.io.IOException;
+import java.util.Objects;
 
 public class FragmentPlayer extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
     String TAG = "Tim";
@@ -29,14 +36,33 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
     Button btn_10p;
     Button tap;
     Button saveInList;
+    int soundIdShot;
+    SoundPool sp;
 
     CompoundButton compoundButton_play;
     CompoundButton compoundButton_accent;
+//    SimpleExoPlayer player;
+
+    MetronomeService metronomeService;
     long millis;
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        sp = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+
+        soundIdShot = sp.load(getActivity(), R.raw.wood, 1);
+
+
+        sp.play(soundIdShot, 1, 1, 0, 0, 1);
+
+        metronomeService = new MetronomeService();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_player, null);
+        @SuppressLint("InflateParams") View rootView = inflater.inflate(R.layout.fragment_player, null);
         btn_1m = (Button) rootView.findViewById(R.id.bn1m);
         btn_5m = (Button) rootView.findViewById(R.id.bn5m);
         btn_10m = (Button) rootView.findViewById(R.id.bn10m);
@@ -45,6 +71,7 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
         btn_10p = (Button) rootView.findViewById(R.id.bn10p);
         tap = (Button) rootView.findViewById(R.id.tap);
         saveInList = (Button) rootView.findViewById(R.id.saveList);
+
 
 
         compoundButton_play = (CompoundButton) rootView.findViewById((R.id.play));
@@ -69,6 +96,7 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
         saveInList.setOnClickListener(this);
         return rootView;
     }
+
 
 
     @Override
@@ -110,6 +138,13 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
 
         switch (buttonView.getId()){
             case R.id.play:
+                if (isChecked) {
+                    play();
+                    Log.d(TAG, "playing");
+                }
+                else metronomeService.stopSelf();
+
+
 
 
                 break;
@@ -120,4 +155,12 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
 
 
     }
+
+    private void play() {
+
+//        sp1.play(soundId1, 1, 1, 0, 10,  1);
+
+
+    }
+
 }

@@ -2,8 +2,6 @@ package com.example.myapplication;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,21 +12,27 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.myapplication.ui.main.DBHelper;
 import com.example.myapplication.ui.main.Track;
 
 import java.util.ArrayList;
 
 public class MyAdapter extends BaseAdapter {
     LayoutInflater lInflater;
-    ArrayList<Track> tracksList;
+    ArrayList<Track> tracksList = new ArrayList<Track>();
     boolean isSelectionMode;
+    Track t_default = new Track("Здесь будут находиться треки с именем вместо данной строки", 90, false, 4, 4, 0);
 
     public MyAdapter(Context context, ArrayList<Track> tracksList_) {
         lInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         isSelectionMode = false;
-        tracksList = tracksList_;
+        if (tracksList_ == null){
+            tracksList.add(t_default);
+        }
+        else {
+            tracksList.remove(t_default);
+            tracksList = tracksList_;
+        }
 
 
     }
@@ -105,4 +109,8 @@ public class MyAdapter extends BaseAdapter {
             //getTrack((Integer) buttonView.getTag()).box = isChecked;
         }
     };
+    public void updateList(ArrayList<Track> newList) {
+        tracksList = newList;
+        this.notifyDataSetChanged();
+    }
 }

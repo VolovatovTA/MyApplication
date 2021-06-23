@@ -21,6 +21,7 @@ import com.example.myapplication.R;
 
 public class MetronomeService extends Service {
     Handler  h;
+    String TAG = "Tim";
     SoundPool sp1 = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
     int soundId1;
     final String ACTION_PAUSE = "321";
@@ -28,7 +29,7 @@ public class MetronomeService extends Service {
     int iteration = 0;
     private final IBinder binder = new LocalBinder();
     public MetronomeService() {
-        Log.d("startCommand", "constructor");
+        Log.d(TAG, "constructor");
         h = new Handler();
     }
 
@@ -43,10 +44,10 @@ public class MetronomeService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         soundId1 = sp1.load(getBaseContext(), R.raw.click, 1);
         String action = intent.getAction();
-        Log.d("startCommand", "start");
+        Log.d(TAG, "start");
 
         if (action == ACTION_PAUSE){
-            Log.d("startCommand", "stop action");
+            Log.d(TAG, "stop action");
             stopForeground(true);
             h.removeCallbacks(PlayingSound);
         }
@@ -99,7 +100,7 @@ public class MetronomeService extends Service {
            // sp1.play(soundId1,1,1,1,0,1);
             sp1.play(soundId1, 1, 1, 0, 0,  1);
 
-            Log.d("startCommand", "run");
+            Log.d(TAG, "run");
         }
     };
 

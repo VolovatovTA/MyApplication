@@ -5,6 +5,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -24,19 +26,26 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.ui.main.SectionsPagerAdapter;
 
-public class MainActivity extends AppCompatActivity implements ServiceConnection {
+import java.io.IOException;
+
+public class MainActivity extends AppCompatActivity implements ServiceConnection, SoundPool.OnLoadCompleteListener {
 
     SectionsPagerAdapter sectionsPagerAdapter;
     public ViewPager viewPager;
     TabLayout tabs;
     int i = 0;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = new Intent(this, MetronomeService.class);
+        startService(intent);
+        bindService(intent, this, Context.BIND_AUTO_CREATE);
+
+
+
         setContentView(R.layout.activity_main);
-
-
         sectionsPagerAdapter = new SectionsPagerAdapter( getSupportFragmentManager());
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -96,5 +105,9 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     @Override
     public void onServiceDisconnected(ComponentName name) {
 
+    }
+
+    @Override
+    public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
     }
 }
