@@ -28,24 +28,21 @@ import com.example.myapplication.ui.main.SectionsPagerAdapter;
 
 import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity implements ServiceConnection, SoundPool.OnLoadCompleteListener {
+public class MainActivity extends AppCompatActivity {
 
-    SectionsPagerAdapter sectionsPagerAdapter;
+        SectionsPagerAdapter sectionsPagerAdapter;
     public ViewPager viewPager;
     TabLayout tabs;
     int i = 0;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = new Intent(this, MetronomeService.class);
-        startService(intent);
-        bindService(intent, this, Context.BIND_AUTO_CREATE);
-
-
-
         setContentView(R.layout.activity_main);
+
+
         sectionsPagerAdapter = new SectionsPagerAdapter( getSupportFragmentManager());
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -58,13 +55,6 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
             @Override
             public void onPageSelected(int position) {
-//                Fragment frag1 = getFragmentManager().findFragmentByTag(tabs.getTag(0));
-//
-//                ListView listView = frag1.getView().findViewById(R.id.lvList);
-//                MyAdapter myAdapter = (MyAdapter) listView.getAdapter();
-//                myAdapter.notifyDataSetChanged();
-
-//                if (position == 1) ; getSupportFragmentManager().s
 
             }
 
@@ -82,9 +72,6 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
     @Override
     protected void onStart() {
-//        Intent intent = new Intent(this, MetronomeService.class);
-//        startService(intent);
-//        bindService(intent, this, Context.BIND_AUTO_CREATE);
         super.onStart();
 
     }
@@ -94,20 +81,5 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         super.onDestroy();
     }
 
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder iBinder) {
-        Log.d("startCommand", "Service is Connected");
-//        MetronomeService.LocalBinder binder = (MetronomeService.LocalBinder) iBinder;
-//        service = binder.getService();
-//        service.play();
-    }
 
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-
-    }
-
-    @Override
-    public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
-    }
 }

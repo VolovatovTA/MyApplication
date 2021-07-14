@@ -21,7 +21,7 @@ import com.example.myapplication.R;
 
 public class MetronomeService extends Service {
     Handler  h;
-    String TAG = "Tim";
+    String TAG = "Timofey";
     SoundPool sp1 = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
     int soundId1;
     final String ACTION_PAUSE = "321";

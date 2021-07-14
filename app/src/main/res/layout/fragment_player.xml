@@ -9,7 +9,7 @@
 
     <SeekBar
         android:id="@+id/seekBar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginTop="8dp"
         android:verticalScrollbarPosition="right"
@@ -21,17 +21,17 @@
 
     <EditText
         android:id="@+id/editTextNumber"
-        android:layout_width="76dp"
-        android:layout_height="61dp"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:allowUndo="false"
-        android:maxLength="3"
         android:background="@android:color/holo_green_light"
         android:contextClickable="false"
         android:cursorVisible="false"
         android:ems="10"
         android:gravity="center_horizontal"
-        android:inputType="numberPassword"
+        android:inputType="number"
+        android:maxLength="3"
         android:text="@string/check"
         android:textAlignment="center"
         android:textSize="65dp"

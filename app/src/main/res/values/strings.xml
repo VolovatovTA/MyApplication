@@ -23,4 +23,8 @@
     <string name="_136">136</string>
     <string name="accent_on">Accent:On</string>
     <string name="save_in_list">Save in List</string>
+    <string name="channel_name">chanal_1</string>
+    <string name="channel_description">Chanel for notification that metronom is playing</string>
+    <string name="notificationTitle">Metronome</string>
+    <string name="notificationText">Metronome is playing</string>
 </resources>
