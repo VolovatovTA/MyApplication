@@ -24,6 +24,7 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.StringRes;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -36,10 +37,9 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import java.io.IOException;
 import java.util.Objects;
 
-public class FragmentPlayer extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SoundPool.OnLoadCompleteListener, ServiceConnection {
-    private static final String CHANNEL_ID = "1";
-    private static final int NOTIFY_ID = 1;
-    String TAG = "Tim";
+public class FragmentPlayer extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SoundPool.OnLoadCompleteListener, ServiceConnection, SeekBar.OnSeekBarChangeListener {
+
+    String TAG = "Timofey";
     SeekBar seekBar;
     Button btn_1m;
     Button btn_5m;
@@ -60,15 +60,15 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
     long millis;
     int statusOfLoadComplete = 0;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
         metronomeService = new MetronomeService();
-        Intent intent = new Intent(getContext(), MetronomeService.class);
-        getActivity().startService(intent);
-        getActivity().bindService(intent, this, Context.BIND_AUTO_CREATE);
+
+
     }
 
     @Override
@@ -102,6 +102,7 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             seekBar.setMin(30);
         }
+        seekBar.setOnSeekBarChangeListener(this);
 
         btn_1m.setOnClickListener(this);
         btn_5m.setOnClickListener(this);
@@ -155,11 +156,18 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
 
         switch (buttonView.getId()){
             case R.id.play:
+                Intent intent = new Intent(getContext(), MetronomeService.class);
                 if (isChecked) {
-                    play();
+
+                    intent.setAction(MetronomeService.ACTION_PLAY);
+                    getActivity().startService(intent);
                     Log.d(TAG, "playing");
                 }
-                else metronomeService.stopSelf();
+                else {
+
+                    intent.setAction(MetronomeService.ACTION_PAUSE);
+                    getActivity().startService(intent);
+                }
 
                 break;
             case R.id.accent:
@@ -171,22 +179,21 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
     }
 
     private void play() {
-        createNotificationChannel();
-
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(getActivity().getBaseContext(), CHANNEL_ID)
-                        .setSmallIcon(R.drawable.exo_notification_small_icon)
-                        .setContentTitle(getString(R.string.notificationTitle))
-                        .setContentText(getString(R.string.notificationText))
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        NotificationManagerCompat notificationManager =
-                NotificationManagerCompat.from(getActivity().getBaseContext());
-        Notification notification = builder.build();
-        notificationManager.notify(NOTIFY_ID, notification);
+//
+//        NotificationCompat.Builder builder =
+//                new NotificationCompat.Builder(getActivity().getBaseContext(), CHANNEL_ID)
+//                        .setSmallIcon(R.drawable.exo_notification_small_icon)
+//                        .setContentTitle(getString(R.string.notificationTitle))
+//                        .setContentText(getString(R.string.notificationText))
+//                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+//
+//        NotificationManagerCompat notificationManager =
+//                NotificationManagerCompat.from(getActivity().getBaseContext());
+//        Notification notification = builder.build();
+//        notificationManager.notify(NOTIFY_ID, notification);
 
         if (statusOfLoadComplete == 1){
-           metronomeService.startForeground();
+//           metronomeService.startForeground(31, notification);
         }
         else {Toast toast = Toast.makeText(getContext(),
                 "Секундочку, подгружаем звуки", Toast.LENGTH_SHORT);
@@ -199,21 +206,7 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
         statusOfLoadComplete = 1;
 
     }
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.channel_name);
-            String description = getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
+
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
@@ -222,6 +215,35 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
+
+
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        int bpm = seekBar.getProgress();
+        pushToService(bpm);
+    }
+
+    private void pushToService(long bpm) {
+        metronomeService.current_bpm = bpm;
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        metronomeService.stopSelf();
+        Log.d(TAG, "onDestroy FragmentPlayer");
 
     }
 }

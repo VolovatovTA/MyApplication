@@ -12,7 +12,8 @@
         <service
             android:name=".ui.main.MetronomeService"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false"
+            android:process="process_for_playing_sound"/>
 
         <activity
             android:name=".MainActivity"
@@ -27,6 +28,7 @@
         <activity android:theme="@style/Theme.AppCompat.Dialog" android:name=".Saver"/>
 
     </application>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"
+    <uses-permission
+        android:name="android.permission.FOREGROUND_SERVICE"
         tools:ignore="ManifestOrder" />
 </manifest>
