@@ -1,43 +1,34 @@
 package com.example.myapplication.ui.main;
 
 import android.annotation.SuppressLint;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.annotation.StringRes;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.Saver;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 
-import java.io.IOException;
-import java.util.Objects;
-
-public class FragmentPlayer extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SoundPool.OnLoadCompleteListener, ServiceConnection, SeekBar.OnSeekBarChangeListener {
+public class FragmentPlayer extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SoundPool.OnLoadCompleteListener, ServiceConnection, SeekBar.OnSeekBarChangeListener, TextView.OnEditorActionListener {
 
     String TAG = "Timofey";
     SeekBar seekBar;
@@ -59,6 +50,7 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
     MetronomeService metronomeService;
     long millis;
     int statusOfLoadComplete = 0;
+    EditText bpm_EditText;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -83,8 +75,7 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
         btn_10p = (Button) rootView.findViewById(R.id.bn10p);
         tap = (Button) rootView.findViewById(R.id.tap);
         saveInList = (Button) rootView.findViewById(R.id.saveList);
-
-
+        bpm_EditText = (EditText) rootView.findViewById(R.id.editTextNumber);
 
         compoundButton_play = (CompoundButton) rootView.findViewById((R.id.play));
         compoundButton_accent = (CompoundButton) rootView.findViewById((R.id.accent));
@@ -102,6 +93,9 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             seekBar.setMin(30);
         }
+        seekBar.setProgress(90);
+        bpm_EditText.setText(String.valueOf(seekBar.getProgress()));
+        bpm_EditText.setOnEditorActionListener(this);
         seekBar.setOnSeekBarChangeListener(this);
 
         btn_1m.setOnClickListener(this);
@@ -222,12 +216,13 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         int bpm = seekBar.getProgress();
-        pushToService(bpm);
+        bpm_EditText.setText(String.valueOf(seekBar.getProgress()));
+
+        metronomeService.setBpm(bpm);
+
     }
 
-    private void pushToService(long bpm) {
-        metronomeService.current_bpm = bpm;
-    }
+
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
@@ -245,5 +240,13 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
         metronomeService.stopSelf();
         Log.d(TAG, "onDestroy FragmentPlayer");
 
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        Log.d(TAG, v.getText().toString());
+        seekBar.setProgress(Integer.parseInt(v.getText().toString()));
+
+        return false;
     }
 }

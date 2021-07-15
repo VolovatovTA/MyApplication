@@ -1,36 +1,22 @@
 package com.example.myapplication;
 
-import android.app.Fragment;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.media.AudioManager;
-import android.media.SoundPool;
-import android.os.Binder;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.util.Log;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-
-
-import com.example.myapplication.ui.main.FragmentLibrary;
-import com.example.myapplication.ui.main.MetronomeService;
+import com.example.myapplication.databinding.ActivityMainBinding;
 import com.google.android.material.tabs.TabLayout;
-
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
-
-
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import com.example.myapplication.ui.main.SectionsPagerAdapter;
-
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
-        SectionsPagerAdapter sectionsPagerAdapter;
+    private AppBarConfiguration appBarConfiguration;
+    private ActivityMainBinding binding;
+
+    SectionsPagerAdapter sectionsPagerAdapter;
     public ViewPager viewPager;
     TabLayout tabs;
     int i = 0;
@@ -40,14 +26,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setSupportActionBar(binding.toolbar);
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_container);
+//        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
+//
+//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        sectionsPagerAdapter = new SectionsPagerAdapter( getSupportFragmentManager());
-        viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(sectionsPagerAdapter);
-        viewPager.setOffscreenPageLimit(0);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        binding.viewPager.setAdapter(sectionsPagerAdapter);
+        binding.viewPager.setOffscreenPageLimit(0);
+        binding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -64,9 +55,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        tabs = findViewById(R.id.tabs);
-        tabs.setupWithViewPager(viewPager);
+        binding.tabs.setupWithViewPager(binding.viewPager);
 
+        binding.tabs.getTabAt(0).setText(R.string.metronom);
+        binding.tabs.getTabAt(1).setText(R.string.list);
 
     }
 

@@ -20,7 +20,7 @@ public class MyAdapter extends BaseAdapter {
     LayoutInflater lInflater;
     ArrayList<Track> tracksList = new ArrayList<Track>();
     boolean isSelectionMode;
-    Track t_default = new Track("Здесь будут находиться треки с именем вместо данной строки", 90, false, 4, 4, 0);
+    Track t_default = new Track("", 90, false, 4, 4, 0);
 
     public MyAdapter(Context context, ArrayList<Track> tracksList_) {
         lInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -46,6 +46,7 @@ public class MyAdapter extends BaseAdapter {
     // элемент по позиции
     @Override
     public Track getItem(int position) {
+
         return tracksList.get(position);
     }
 

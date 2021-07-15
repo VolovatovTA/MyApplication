@@ -1,7 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="app_name">Metronome</string>
     <string name="check">90</string>
     <string name="count">4</string>
     <string name="slash">/</string>
@@ -19,12 +17,10 @@
     <string name="saveL">Save in list</string>
     <string name="metronom">player</string>
     <string name="list">LIST</string>
-    <string name="balaberda">gjfjdhjnfgjfjdhjnfgfgjfjdhjnfgjfjdhjnfgjfjdhjnfgjfjdhjnfgfgjfjdhjnfgjfjdhjnf</string>
-    <string name="_136">136</string>
-    <string name="accent_on">Accent:On</string>
     <string name="save_in_list">Save in List</string>
     <string name="channel_name">chanal_1</string>
     <string name="channel_description">Chanel for notification that metronom is playing</string>
     <string name="notificationTitle">Metronome</string>
     <string name="notificationText">Metronome is playing</string>
+    <string name="text_of_empty_list">Здесь будет отображаться список треков, после того как будет сохранён хотя бы один с помощью кнопки "Сохранить в лист"</string>
 </resources>

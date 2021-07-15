@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Binder;
@@ -23,9 +24,9 @@ import com.example.myapplication.R;
 public class MetronomeService extends Service {
     Handler h;
 
-    public long current_bpm = 90;
+    public long current_bpm;
     String TAG = "Timofey";
-    SoundPool sp1 = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+    SoundPool sp;
     int soundId1;
     public final static String ACTION_PLAY = "3";
     public final static String ACTION_PAUSE = "4";
@@ -34,7 +35,6 @@ public class MetronomeService extends Service {
     private static final String CHANNEL_ID = "1";
     private static final int NOTIFY_ID = 1;
     boolean isPlaying = false;
-    int iteration = 0;
     private final IBinder binder = new LocalBinder();
 
     public MetronomeService() {
@@ -56,8 +56,6 @@ public class MetronomeService extends Service {
         super.onCreate();
         Log.d(TAG, "onCreate");
 
-
-
         h =  new Handler(){
             public void handleMessage(android.os.Message msg) {
                 switch (msg.what) {
@@ -78,9 +76,26 @@ public class MetronomeService extends Service {
 
     }
 
+    public void setBpm(int bpm) {
+
+        current_bpm = bpm;
+        Log.d(TAG, "In UI thread current_bpm = " + current_bpm);
+
+
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        soundId1 = sp1.load(getBaseContext(), R.raw.click, 1);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            sp = new SoundPool.Builder()
+                    .setMaxStreams(1)
+                    .setAudioAttributes(new AudioAttributes.Builder()
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .build())
+                    .build();
+        } else sp = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+
         Log.d(TAG, "startCommand");
         String action = intent.getAction();
 
@@ -139,51 +154,30 @@ public class MetronomeService extends Service {
     }
 
     private Runnable r = new Runnable() {
-
         public void run() {
-
-
-            Log.d(TAG, "current_bpm = " + current_bpm);
+            Log.d(TAG, "In worker thread current_bpm = " + current_bpm);
+            // Вот сюда не приходят пока что обновлённый темп current_bpm
             if (isPlaying){
                 h.postDelayed(r, 60000/current_bpm);
-                sp1.play(soundId1, 1, 1, 0, 0, 1);
+                sp.play(soundId1, 1, 1, 0, 0, 1);
             }
-
         }
-
     };
-    Thread t = new Thread(r);
-    private void changeBpm (long bpm){
-        Message msg = h.obtainMessage(CHANGE_BPM, (int) current_bpm, 4);
-        h.sendEmptyMessage(CHANGE_BPM);
-    }
-
-
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
-
-
     }
-
     public void play() {
-
         if (isPlaying){
             Log.d(TAG, "play");
-
             h.post(r);
-
         }
         else
         {
             Log.d(TAG, "stop");
-
             h.removeCallbacks(r);
         }
-
     }
-
-
 }
