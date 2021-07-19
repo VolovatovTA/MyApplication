@@ -10,83 +10,49 @@ import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.example.myapplication.R;
 
-public class MetronomeService extends Service {
+public class MetronomeService extends Service implements SoundPool.OnLoadCompleteListener {
+    public static final String ACTION_NONE = "5";
     Handler h;
 
-    public long current_bpm;
-    String TAG = "Timofey";
+    public static long current_bpm;
+    static String TAG = "Timofey";
     SoundPool sp;
     int soundId1;
     public final static String ACTION_PLAY = "3";
     public final static String ACTION_PAUSE = "4";
-    final int CHANGE_COUNT1 = 2;
-    final int CHANGE_BPM = 1;
     private static final String CHANNEL_ID = "1";
-    private static final int NOTIFY_ID = 1;
     boolean isPlaying = false;
-    private final IBinder binder = new LocalBinder();
 
     public MetronomeService() {
         Log.d(TAG, "constructor");
     }
 
-
-
-
-    public class LocalBinder extends Binder {
-        public MetronomeService getService() {
-            return MetronomeService.this;
-        }
+    @Override
+    public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+        Toast t = Toast.makeText(getBaseContext(), R.string.textLoadComplete, Toast.LENGTH_SHORT);
+        t.show();
+        sp.play(soundId1,1,1,1,10,1);
     }
+
+
+
 
     @SuppressLint("HandlerLeak")
     @Override
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate");
-
-        h =  new Handler(){
-            public void handleMessage(android.os.Message msg) {
-                switch (msg.what) {
-                    case CHANGE_BPM:
-                        msg.arg1 = (int) current_bpm;
-                        Log.d(TAG, "changed bpm");
-
-                        break;
-                    case CHANGE_COUNT1:
-                        msg.arg2 = 4;
-                        break;
-                }
-            }
-        };
-
-
-
-
-    }
-
-    public void setBpm(int bpm) {
-
-        current_bpm = bpm;
-        Log.d(TAG, "In UI thread current_bpm = " + current_bpm);
-
-
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-
+        h = new Handler();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             sp = new SoundPool.Builder()
                     .setMaxStreams(1)
@@ -95,6 +61,19 @@ public class MetronomeService extends Service {
                             .build())
                     .build();
         } else sp = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+        sp.load(getBaseContext(), R.raw.wood, 0);
+        sp.setOnLoadCompleteListener(this);
+
+
+    }
+
+
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+
+
 
         Log.d(TAG, "startCommand");
         String action = intent.getAction();
@@ -113,6 +92,7 @@ public class MetronomeService extends Service {
                 play();
                 break;
         }
+
 
 
         return START_STICKY;
@@ -142,42 +122,49 @@ public class MetronomeService extends Service {
 
     }
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return binder;
-    }
 
-    @Override
-    public boolean onUnbind(Intent intent) {
-        return super.onUnbind(intent);
-    }
-
-    private Runnable r = new Runnable() {
-        public void run() {
-            Log.d(TAG, "In worker thread current_bpm = " + current_bpm);
-            // Вот сюда не приходят пока что обновлённый темп current_bpm
-            if (isPlaying){
-                h.postDelayed(r, 60000/current_bpm);
-                sp.play(soundId1, 1, 1, 0, 0, 1);
-            }
-        }
-    };
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
     }
-    public void play() {
-        if (isPlaying){
-            Log.d(TAG, "play");
-            h.post(r);
-        }
-        else
-        {
-            Log.d(TAG, "stop");
-            h.removeCallbacks(r);
-        }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
+
+    public void play() {
+//        if (isPlaying){
+//            Log.d(TAG, "play");
+//
+//            h.post(this);
+//        }
+//        else
+//        {
+//            Log.d(TAG, "stop");
+//            h.removeCallbacks(this);
+//        }
+        h.post(r);
+//
+//        Log.d(TAG, "get_bpm1 = " + getBpm());
+//        setBpm(95);
+//        Log.d(TAG, "get_bpm2 = " + getBpm());
+//        int b  = 100;
+//        setBpm(b);
+//        Log.d(TAG, "get_bpm2 = " + getBpm());
+    }
+
+
+    Runnable r = new Runnable() {
+        @Override
+        public void run() {
+        if (isPlaying){
+            h.postDelayed(this, 60000/current_bpm);
+            sp.play(soundId1, 1, 1, 0, 0, 1);
+        }
+        }
+    };
 }
