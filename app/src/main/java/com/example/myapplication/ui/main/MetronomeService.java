@@ -21,7 +21,7 @@ import androidx.annotation.Nullable;
 
 import com.example.myapplication.R;
 
-public class MetronomeService extends Service {
+public class MetronomeService extends Service implements Runnable{
     Handler h;
 
     public long current_bpm;
@@ -41,7 +41,15 @@ public class MetronomeService extends Service {
         Log.d(TAG, "constructor");
     }
 
-
+    @Override
+    public void run() {
+        Log.d(TAG, "In worker thread current_bpm = " + current_bpm);
+        // Вот сюда не приходят пока что обновлённый темп current_bpm
+        if (isPlaying){
+            h.postDelayed(this, 60000/current_bpm);
+            sp.play(soundId1, 1, 1, 0, 0, 1);
+        }
+    }
 
 
     public class LocalBinder extends Binder {
@@ -153,16 +161,7 @@ public class MetronomeService extends Service {
         return super.onUnbind(intent);
     }
 
-    private Runnable r = new Runnable() {
-        public void run() {
-            Log.d(TAG, "In worker thread current_bpm = " + current_bpm);
-            // Вот сюда не приходят пока что обновлённый темп current_bpm
-            if (isPlaying){
-                h.postDelayed(r, 60000/current_bpm);
-                sp.play(soundId1, 1, 1, 0, 0, 1);
-            }
-        }
-    };
+
 
     @Override
     public void onDestroy() {
@@ -172,12 +171,12 @@ public class MetronomeService extends Service {
     public void play() {
         if (isPlaying){
             Log.d(TAG, "play");
-            h.post(r);
+            h.post(this);
         }
         else
         {
             Log.d(TAG, "stop");
-            h.removeCallbacks(r);
+            h.removeCallbacks(this);
         }
     }
 }
