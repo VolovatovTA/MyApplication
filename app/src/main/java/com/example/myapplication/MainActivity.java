@@ -1,7 +1,9 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import com.example.myapplication.databinding.ActivityMainBinding;
+import com.example.myapplication.ui.main.MetronomeService;
 import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
 
         binding.tabs.getTabAt(0).setText(R.string.metronom);
         binding.tabs.getTabAt(1).setText(R.string.list);
+        Intent intent = new Intent(this, MetronomeService.class);
+        intent.setAction(MetronomeService.ACTION_NONE);
+
+        startService(intent);
 
     }
 

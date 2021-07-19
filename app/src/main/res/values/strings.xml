@@ -23,4 +23,5 @@
     <string name="notificationTitle">Metronome</string>
     <string name="notificationText">Metronome is playing</string>
     <string name="text_of_empty_list">Здесь будет отображаться список треков, после того как будет сохранён хотя бы один с помощью кнопки "Сохранить в лист"</string>
+    <string name="textLoadComplete">Загрузили треки</string>
 </resources>
