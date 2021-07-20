@@ -1,16 +1,10 @@
 package com.example.myapplication.ui.main;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.myapplication.R;
 
@@ -35,7 +29,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         if (position == 0 )
             return new FragmentPlayer();
         else if (position == 1)
-            return new FragmentList();
+            return new FragmentList(mAdapter);
         else return null;        }
 
     @Override

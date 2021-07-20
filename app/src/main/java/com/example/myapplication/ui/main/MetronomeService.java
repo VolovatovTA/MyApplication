@@ -51,16 +51,18 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
         Log.d(TAG, "onCreate");
         h = new Handler();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            sp = new SoundPool.Builder()
-                    .setMaxStreams(100)
-                    .setAudioAttributes(new AudioAttributes.Builder()
-                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                            .setUsage(AudioAttributes.USAGE_MEDIA)
-                            .setFlags(AudioAttributes.FLAG_LOW_LATENCY)
-                            .build())
-                    .build();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                sp = new SoundPool.Builder()
+                        .setMaxStreams(100)
+                        .setAudioAttributes(new AudioAttributes.Builder()
+                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                .setUsage(AudioAttributes.USAGE_MEDIA)
+                                .setFlags(AudioAttributes.FLAG_LOW_LATENCY)
+                                .build())
+                        .build();
+            }
         } else sp = new SoundPool(100, AudioManager.STREAM_MUSIC, 0);
-        soundId1 = sp.load(getBaseContext(), R.raw.click, 0);
+        soundId1 = sp.load(getBaseContext(), R.raw.wood, 0);
         sp.setOnLoadCompleteListener(this);
 
 
