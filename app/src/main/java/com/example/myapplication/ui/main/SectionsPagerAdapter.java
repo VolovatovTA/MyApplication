@@ -35,7 +35,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         if (position == 0 )
             return new FragmentPlayer();
         else if (position == 1)
-            return new FragmentLibrary();
+            return new FragmentList();
         else return null;        }
 
     @Override

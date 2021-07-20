@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
     Intent intent;
 
 
+
     CompoundButton compoundButton_play;
     CompoundButton compoundButton_accent;
 
@@ -59,6 +61,7 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         @SuppressLint("InflateParams") View rootView = inflater.inflate(R.layout.fragment_player, null);
         btn_1m = rootView.findViewById(R.id.bn1m);
         btn_5m = rootView.findViewById(R.id.bn5m);
@@ -136,6 +139,7 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
             case R.id.play:
                 if (isChecked) {
 
+
                     intent.setAction(MetronomeService.ACTION_PLAY);
 
                     Log.d(TAG, "playing");
@@ -168,6 +172,7 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
     @Override
     public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
         statusOfLoadComplete = 1;
+
 
     }
 

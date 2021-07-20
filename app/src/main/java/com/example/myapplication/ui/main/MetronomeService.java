@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.main;
 
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -33,6 +32,7 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
     public final static String ACTION_PAUSE = "4";
     private static final String CHANNEL_ID = "1";
     boolean isPlaying = false;
+    Thread t;
 
     public MetronomeService() {
         Log.d(TAG, "constructor");
@@ -42,13 +42,9 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
     public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
         Toast t = Toast.makeText(getBaseContext(), R.string.textLoadComplete, Toast.LENGTH_SHORT);
         t.show();
-        sp.play(soundId1,1,1,1,10,1);
     }
 
 
-
-
-    @SuppressLint("HandlerLeak")
     @Override
     public void onCreate() {
         super.onCreate();
@@ -56,13 +52,15 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
         h = new Handler();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             sp = new SoundPool.Builder()
-                    .setMaxStreams(1)
+                    .setMaxStreams(100)
                     .setAudioAttributes(new AudioAttributes.Builder()
                             .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .setFlags(AudioAttributes.FLAG_LOW_LATENCY)
                             .build())
                     .build();
-        } else sp = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
-        sp.load(getBaseContext(), R.raw.wood, 0);
+        } else sp = new SoundPool(100, AudioManager.STREAM_MUSIC, 0);
+        soundId1 = sp.load(getBaseContext(), R.raw.click, 0);
         sp.setOnLoadCompleteListener(this);
 
 
@@ -74,8 +72,8 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
     public int onStartCommand(Intent intent, int flags, int startId) {
 
 
-
-
+        t = new Thread(r);
+        t.start();
         Log.d(TAG, "startCommand");
         String action = intent.getAction();
 
@@ -93,8 +91,6 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
                 play();
                 break;
         }
-
-
 
         return START_STICKY;
     }
@@ -137,33 +133,30 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
     }
 
     public void play() {
-//        if (isPlaying){
-//            Log.d(TAG, "play");
-//
-//            h.post(this);
-//        }
-//        else
-//        {
-//            Log.d(TAG, "stop");
-//            h.removeCallbacks(this);
-//        }
-        h.post(r);
-//
-//        Log.d(TAG, "get_bpm1 = " + getBpm());
-//        setBpm(95);
-//        Log.d(TAG, "get_bpm2 = " + getBpm());
-//        int b  = 100;
-//        setBpm(b);
-//        Log.d(TAG, "get_bpm2 = " + getBpm());
+
+
+        if (isPlaying){
+            Log.d(TAG, "play");
+
+            h.post(r);
+        }
+        else
+        {
+            Log.d(TAG, "stop");
+            h.removeCallbacks(r);
+
+        }
     }
 
 
     Runnable r = new Runnable() {
+        long bpm = current_bpm;
+
         @Override
         public void run() {
         if (isPlaying){
-
-            h.postDelayed(this, 60000/current_bpm);
+            Log.d(TAG, "current_bpm = " + bpm);
+            h.postDelayed(this, 60000/bpm);
             sp.play(soundId1, 1, 1, 0, 0, 1);
         }
         }
