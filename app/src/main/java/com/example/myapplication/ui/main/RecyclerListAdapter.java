@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.main;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,29 +13,45 @@ import com.example.myapplication.R;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
-public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder> implements ItemTouchHelperAdapter {
+public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerViewHolder> implements ItemTouchHelperAdapter {
 
-
-    ArrayList<String> mItems;
+    private static final String[] STRINGS = new String[]{
+            "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"
+    };
+    private final List<String> mItems = new ArrayList<>();
 
 
     @Override
     public void onItemDismiss(int position) {
+        Log.d(FragmentList.TAG, "onItemDismiss");
+
         mItems.remove(position);
         notifyItemRemoved(position);
     }
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
+        Log.d(FragmentList.TAG, "onItemMove");
+
         if (fromPosition < toPosition) {
+            Log.d(FragmentList.TAG, "in if");
+
             for (int i = fromPosition; i < toPosition; i++) {
+                Log.d(FragmentList.TAG, "in for");
+
                 Collections.swap(mItems, i, i + 1);
             }
         } else {
+            Log.d(FragmentList.TAG, "in else");
+
             for (int i = fromPosition; i > toPosition; i--) {
+                Log.d(FragmentList.TAG, "in for2");
+
                 Collections.swap(mItems, i, i - 1);
             }
         }
@@ -42,19 +59,24 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHold
         return true;
     }
 
-    public MyRecyclerViewAdapter(int seed) {
-        this.mItems.add(String.valueOf(new Random(seed)));
+    public RecyclerListAdapter() {
+        Log.d(FragmentList.TAG, "RecyclerListAdapter constructor");
+
+        mItems.addAll(Arrays.asList(STRINGS));
     }
 
 
     @Override
     public int getItemViewType(final int position) {
+        Log.d(FragmentList.TAG, "getItemViewType");
+
         return R.layout.item;
     }
 
     @NonNull
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.d(FragmentList.TAG, "onCreateViewHolder");
 
         View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
         return new RecyclerViewHolder(view);
@@ -62,12 +84,16 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHold
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
+        Log.d(FragmentList.TAG, "onBindViewHolder");
+
         holder.getView().setText(mItems.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return 100;
+        Log.d(FragmentList.TAG, "getItemCount");
+
+        return mItems.size();
     }
 
 }

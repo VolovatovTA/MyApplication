@@ -3,7 +3,7 @@
     <string name="check">90</string>
     <string name="count">4</string>
     <string name="slash">/</string>
-    <string name="tap">TAP TEMP</string>
+    <string name="tap">TAP</string>
     <string name="start">START</string>
     <string name="stop">STOP</string>
     <string name="On">ACCENT ON</string>
@@ -14,10 +14,10 @@
     <string name="minus1">-1</string>
     <string name="minus5">-5</string>
     <string name="minus10">-10</string>
-    <string name="saveL">Save in list</string>
+    <string name="saveL">SAVE</string>
     <string name="metronom">player</string>
     <string name="list">LIST</string>
-    <string name="save_in_list">Save in List</string>
+    <string name="save_in_list">SAVE</string>
     <string name="channel_name">chanal_1</string>
     <string name="channel_description">Chanel for notification that metronom is playing</string>
     <string name="notificationTitle">Metronome</string>
