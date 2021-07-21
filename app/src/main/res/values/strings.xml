@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Metronome</string>
-    <string name="check">90</string>
+    <string name="check">123</string>
     <string name="count">4</string>
     <string name="slash">/</string>
     <string name="tap">TAP</string>
