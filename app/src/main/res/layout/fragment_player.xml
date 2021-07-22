@@ -1,232 +1,222 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/background_of_fragments"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:orientation="horizontal"
+    android:gravity="center">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <Button
+
+            android:id="@+id/bn10p"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginBottom="@dimen/between_button"
+            android:alpha="@string/alpha"
+            android:background="@drawable/ovalbutton"
+            android:text="@string/plus10"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/bn5p"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginBottom="@dimen/between_button"
+            android:allowUndo="true"
+            android:alpha="@string/alpha"
+            android:background="@drawable/ovalbutton"
+            android:text="@string/plus5"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/bn1p"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginBottom="@dimen/between_button"
+            android:alpha="@string/alpha"
+            android:background="@drawable/ovalbutton"
+            android:text="@string/plus1"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/bn1m"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginBottom="@dimen/between_button"
+            android:alpha="@string/alpha"
+            android:background="@drawable/ovalbutton"
+            android:text="@string/minus1"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/bn5m"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginBottom="@dimen/between_button"
+            android:alpha="@string/alpha"
+            android:background="@drawable/ovalbutton"
+            android:backgroundTint="#72C7E1"
+            android:color="#c4c4c4"
+            android:text="@string/minus5"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/bn10m"
+            style="@style/ExoMediaButton"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:alpha="@string/alpha"
+            android:background="@drawable/ovalbutton"
+            android:text="@string/minus10"
+            android:textColor="@color/black" />
+    </LinearLayout>
 
     <com.example.myapplication.VerticalSeekBar
         android:id="@+id/seekBar"
-        android:layout_width="55dp"
-        android:layout_height="600dp"
-        android:thumb="@drawable/seekbar_progress"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.492" />
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="140dp"
-        android:layout_height="200dp"
+        android:layout_width="match_parent"
+        android:layout_height="662dp"
+        android:layout_weight="1.2"
         android:alpha="@string/alpha"
-        android:background="@drawable/view_under__bpm_and_44"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/seekBar"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:progress="50"
+        android:progressDrawable="@drawable/seekbar_progress"
+        android:thumb="@drawable/thumb_custom" />
 
-    <Button
-        android:id="@+id/tap"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_marginTop="32dp"
-        android:layout_weight="1"
-        android:alpha="@string/alpha"
-        android:background="@drawable/roundedbutton"
-        android:text="@string/tap"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/seekBar"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
-
-    <Button
-        android:id="@+id/bn1m"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginBottom="32dp"
-        android:layout_weight="1"
-        android:textColor="@color/black"
-        android:alpha="@string/alpha"
-        android:background="@drawable/ovalbutton"
-        android:text="@string/minus1"
-        app:layout_constraintBottom_toTopOf="@+id/bn5m"
-        app:layout_constraintEnd_toStartOf="@+id/seekBar"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/count1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/count"
-        android:textSize="50sp"
-        app:layout_constraintEnd_toStartOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="@+id/textView" />
-
-    <ToggleButton
-        android:id="@+id/accent"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_marginBottom="32dp"
-        android:alpha="@string/alpha"
-        android:background="@drawable/roundedbutton"
-        android:textOff="@string/Off"
-        android:textOn="@string/On"
-        app:layout_constraintBottom_toTopOf="@+id/view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/seekBar" />
-
-    <Button
-        android:id="@+id/bn5p"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginBottom="32dp"
-        android:layout_weight="1"
-        android:background="@drawable/ovalbutton"
-        android:alpha="@string/alpha"
-        android:text="@string/plus5"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/bn1p"
-        app:layout_constraintEnd_toStartOf="@+id/seekBar"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/count2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="@string/count"
-        android:textSize="50sp"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="@+id/textView" />
-
-    <Button
-        android:id="@+id/bn1p"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginBottom="32dp"
-        android:layout_weight="1"
-        android:background="@drawable/ovalbutton"
-        android:text="@string/plus1"
-        android:alpha="@string/alpha"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/bn1m"
-        app:layout_constraintEnd_toStartOf="@+id/seekBar"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ToggleButton
-        android:id="@+id/play"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_marginTop="32dp"
-        android:layout_weight="1"
-        android:alpha="@string/alpha"
-        android:background="@drawable/roundedbutton"
-        android:checked="false"
-        android:clickable="true"
-        android:ellipsize="none"
-        android:textOff="@string/start"
-        android:textOn="@string/stop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/seekBar"
-        app:layout_constraintTop_toBottomOf="@+id/tap" />
-
-    <Button
-        android:id="@+id/bn5m"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginBottom="32dp"
-        android:layout_weight="1"
-        android:color = "#c4c4c4"
-        android:textColor="@color/black"
-        android:background="@drawable/ovalbutton"
-        android:alpha="@string/alpha"
-        android:text="@string/minus5"
-        app:layout_constraintBottom_toTopOf="@+id/bn10m"
-        app:layout_constraintEnd_toStartOf="@+id/seekBar"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/saveList"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_marginBottom="32dp"
-        android:layout_weight="1"
-        android:alpha="@string/alpha"
-        android:background="@drawable/roundedbutton"
-        android:text="@string/saveL"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/accent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/seekBar" />
-
-    <Button
-
-        android:id="@+id/bn10p"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginBottom="32dp"
-        android:layout_weight="1"
-        android:background="@drawable/ovalbutton"
-        android:text="@string/plus10"
-        android:alpha="@string/alpha"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/bn5p"
-        app:layout_constraintEnd_toStartOf="@+id/seekBar"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="@string/slash"
-        android:textSize="50sp"
-        app:layout_constraintBottom_toBottomOf="@+id/view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toEndOf="@+id/seekBar" />
-
-    <Button
-        android:id="@+id/bn10m"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_weight="1"
-        android:alpha="@string/alpha"
-        android:background="@drawable/ovalbutton"
-        android:text="@string/minus10"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/play"
-        app:layout_constraintEnd_toStartOf="@+id/seekBar"
-        app:layout_constraintStart_toStartOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.7"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:gravity="center">
 
 
-    <EditText
-        android:id="@+id/editTextNumber"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:allowUndo="false"
-        android:autofillHints="@string/check"
-        android:contextClickable="false"
-        android:cursorVisible="false"
-        android:gravity="center_horizontal"
-        android:inputType="number"
-        android:maxLength="3"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="65dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/seekBar"
-        app:layout_constraintTop_toTopOf="@+id/view"
-        tools:ignore="LabelFor" />
+        <Button
+            android:id="@+id/saveList"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginBottom="@dimen/between_button"
+            android:alpha="@string/alpha"
+            android:background="@drawable/roundedbutton"
+            android:text="@string/saveL"
+            android:textColor="@color/black"
+            android:theme="@style/ExoMediaButton.Play" />
+
+        <ToggleButton
+            android:id="@+id/accent"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:alpha="@string/alpha"
+            android:layout_marginBottom="@dimen/between_button"
+            android:background="@drawable/roundedbutton"
+            android:textOff="@string/Off"
+            android:textOn="@string/On" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/between_button"
+            >
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:alpha="@string/alpha"
+                android:background="@drawable/view_under__bpm_and_44" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="188dp"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/editTextNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="@string/check"
+                    android:cursorVisible="false"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="65sp"
+                    tools:ignore="LabelFor" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+                    <TextView
+                        android:id="@+id/count1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/count"
+
+                        android:textSize="50sp" />
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/slash"
+                        android:textSize="50sp" />
+
+                    <TextView
+                        android:id="@+id/count2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/count"
+                        android:textSize="50sp" />
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+
+        <Button
+            android:id="@+id/tap"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:alpha="@string/alpha"
+            android:layout_marginBottom="@dimen/between_button"
+
+            android:background="@drawable/roundedbutton"
+            android:text="@string/tap"
+            android:textColor="@color/black" />
+
+        <ToggleButton
+            android:id="@+id/play"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:alpha="@string/alpha"
+            android:background="@drawable/roundedbutton"
+            android:checked="false"
+            android:ellipsize="none"
+            android:textOff="@string/start"
+            android:textOn="@string/stop" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

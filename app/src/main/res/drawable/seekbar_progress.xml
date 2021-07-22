@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <solid
-        android:color="#C4C4C4"
-        android:height = "10dp"
-        android:width = "30dp">
-
-    </solid>
-    <corners
-        android:radius="10dp"/>
-
-
-
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:id="@android:id/background"
+    android:gravity="center_vertical|fill_horizontal">
+    <shape android:shape="rectangle"
+        android:tint="@color/white">
+        <corners android:radius="8dp"/>
+        <size android:height="10dp" />
+        <solid android:color="@color/white" />
+    </shape>
+</item>
+<item android:id="@android:id/progress"
+    android:gravity="center_vertical|fill_horizontal">
+    <scale android:scaleWidth="100%">
+        <selector>
+            <item android:state_enabled="false"
+                android:drawable="@android:color/transparent" />
+            <item>
+                <shape android:shape="rectangle"
+                    android:tint="#DB6A6A">
+                    <corners android:radius="8dp"/>
+                    <size android:height="15dp" />
+                    <solid android:color="#DB6A6A" />
+                </shape>
+            </item>
+        </selector>
+    </scale>
+</item>
+</layer-list>
