@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,11 +26,12 @@ import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.Saver;
+import com.example.myapplication.VerticalSeekBar;
 
 public class FragmentPlayer extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SoundPool.OnLoadCompleteListener, ServiceConnection, SeekBar.OnSeekBarChangeListener, TextView.OnEditorActionListener {
 
     String TAG = "Timofey";
-    SeekBar seekBar;
+    VerticalSeekBar verticalSeekBar;
     Button btn_1m;
     Button btn_5m;
     Button btn_10m;
@@ -72,7 +72,7 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
         tap = rootView.findViewById(R.id.tap);
         saveInList = rootView.findViewById(R.id.saveList);
         bpm_EditText = rootView.findViewById(R.id.editTextNumber);
-        seekBar = rootView.findViewById(R.id.seekBar);
+        verticalSeekBar = rootView.findViewById(R.id.seekBar);
 
         compoundButton_play = rootView.findViewById((R.id.play));
         compoundButton_accent = rootView.findViewById((R.id.accent));
@@ -81,14 +81,14 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
         compoundButton_play.setOnCheckedChangeListener(this);
         compoundButton_accent.setOnCheckedChangeListener(this);
 
-        seekBar.setMax(200);
+        verticalSeekBar.setMax(200);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            seekBar.setMin(30);
+            verticalSeekBar.setMin(30);
         }
-        seekBar.setProgress(90);
-        bpm_EditText.setText(String.valueOf(seekBar.getProgress()));
+        verticalSeekBar.setProgress(90);
+        bpm_EditText.setText(String.valueOf(verticalSeekBar.getProgress()));
         bpm_EditText.setOnEditorActionListener(this);
-        seekBar.setOnSeekBarChangeListener(this);
+        verticalSeekBar.setOnSeekBarChangeListener(this);
 
         btn_1m.setOnClickListener(this);
         btn_5m.setOnClickListener(this);
@@ -107,22 +107,22 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
     public void onClick(View v) {
 
         if (v.getId() == R.id.bn1m) {
-            seekBar.setProgress(seekBar.getProgress() - 1);
+            verticalSeekBar.setProgress(verticalSeekBar.getProgress() - 1);
         } else if (v.getId() == R.id.bn5m) {
-            seekBar.setProgress(seekBar.getProgress() - 5);
+            verticalSeekBar.setProgress(verticalSeekBar.getProgress() - 5);
         } else if (v.getId() == R.id.bn10m) {
-            seekBar.setProgress(seekBar.getProgress() - 10);
+            verticalSeekBar.setProgress(verticalSeekBar.getProgress() - 10);
         } else if (v.getId() == R.id.bn1p) {
-            seekBar.setProgress(seekBar.getProgress() + 1);
+            verticalSeekBar.setProgress(verticalSeekBar.getProgress() + 1);
         } else if (v.getId() == R.id.bn5p) {
-            seekBar.setProgress(seekBar.getProgress() + 5);
+            verticalSeekBar.setProgress(verticalSeekBar.getProgress() + 5);
         } else if (v.getId() == R.id.bn10p) {
-            seekBar.setProgress(seekBar.getProgress() + 10);
+            verticalSeekBar.setProgress(verticalSeekBar.getProgress() + 10);
         } else if (v.getId() == R.id.tap) {
             millis = System.currentTimeMillis();
         } else if (v.getId() == R.id.saveList) {
             Intent intent1 = new Intent(getActivity(), Saver.class);
-            intent1.putExtra("temp", seekBar.getProgress());
+            intent1.putExtra("temp", verticalSeekBar.getProgress());
             intent1.putExtra("accent", compoundButton_accent.isChecked());
             intent1.putExtra("number_share", 4);
             intent1.putExtra("number_sounds", 4);
@@ -219,7 +219,7 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         Log.d(TAG, v.getText().toString());
-        seekBar.setProgress(Integer.parseInt(v.getText().toString()));
+        verticalSeekBar.setProgress(Integer.parseInt(v.getText().toString()));
 
         return false;
     }
