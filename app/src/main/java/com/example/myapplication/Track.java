@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.main;
+package com.example.myapplication;
 
 public class Track {
     public String name;

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name = "style_of_buttons"
-        parent = "@android:style/"
+        />
+<!--    <item name="weight" type=""-->
 </resources>

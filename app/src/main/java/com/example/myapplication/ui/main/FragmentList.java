@@ -34,10 +34,8 @@ public class FragmentList extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        recyclerView.setAdapter(new RecyclerListAdapter());
-
-
         RecyclerListAdapter myAdapter = new RecyclerListAdapter();
+        recyclerView.setAdapter(myAdapter);
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(myAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(recyclerView);

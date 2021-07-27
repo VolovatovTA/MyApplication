@@ -2,8 +2,11 @@ package com.example.myapplication.ui.main;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.jetbrains.annotations.NotNull;
 
 public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
@@ -11,7 +14,6 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     public SimpleItemTouchHelperCallback(ItemTouchHelperAdapter adapter) {
         Log.d(FragmentList.TAG, "onCreateView");
-
         mAdapter = adapter;
     }
 
@@ -34,7 +36,7 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
         Log.d(FragmentList.TAG, "getMovementFlags");
 
         int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-        int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+        int swipeFlags = ItemTouchHelper.START ;
         return makeMovementFlags(dragFlags, swipeFlags);
     }
 
@@ -45,6 +47,8 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
         mAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
     }
+
+
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {

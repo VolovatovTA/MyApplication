@@ -12,8 +12,6 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.myapplication.ui.main.Track;
-
 import java.util.ArrayList;
 
 public class MyAdapter extends BaseAdapter {
@@ -50,13 +48,13 @@ public class MyAdapter extends BaseAdapter {
         return tracksList.get(position);
     }
 
-    // id по позиции
+    // передаём id по позиции
     @Override
     public long getItemId(int position) {
         return position;
     }
 
-    // пункт списка
+    // заполняем пункт списка ,чтобы он потом передался куда нужно
     @SuppressLint("SetTextI18n")
     public View getView(int position, View convertView, ViewGroup parent) {
         // используем созданные, но не используемые view
@@ -80,14 +78,14 @@ public class MyAdapter extends BaseAdapter {
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.cbBox);
         LinearLayout.LayoutParams params_for_chBox = (LinearLayout.LayoutParams) checkBox.getLayoutParams();
         if (isSelectionMode) {
-            ;
+
             params_for_chBox.width = 51;
             params_for_chBox.leftMargin = 15;
             checkBox.setLayoutParams(params_for_chBox);
             checkBox.setVisibility(View.VISIBLE);
         }
         else {
-            ;
+
             params_for_chBox.width = 1;
             params_for_chBox.leftMargin = 15;
             checkBox.setLayoutParams(params_for_chBox);
