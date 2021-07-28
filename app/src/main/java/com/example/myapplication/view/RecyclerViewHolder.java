@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.main;
+package com.example.myapplication.view;
 
 import android.view.View;
 import android.widget.TextView;

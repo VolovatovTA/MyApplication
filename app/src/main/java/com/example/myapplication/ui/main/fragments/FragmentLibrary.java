@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.main;
+package com.example.myapplication.ui.main.fragments;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,10 +23,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.example.myapplication.DBHelper;
-import com.example.myapplication.MyAdapter;
+import com.example.myapplication.database.DBHelper;
+import com.example.myapplication.adapters.MyAdapter;
 import com.example.myapplication.R;
-import com.example.myapplication.Track;
+import com.example.myapplication.database.Track;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.main;
+package com.example.myapplication.ui.main.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -6,15 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
-
-import org.jetbrains.annotations.NotNull;
+import com.example.myapplication.adapters.RecyclerListAdapter;
+import com.example.myapplication.view.SimpleItemTouchHelperCallback;
 
 
 public class FragmentList extends Fragment {

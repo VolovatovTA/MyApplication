@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.main;
+package com.example.myapplication.adapters;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,14 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
-
-import org.jetbrains.annotations.NotNull;
+import com.example.myapplication.ui.main.fragments.FragmentList;
+import com.example.myapplication.view.RecyclerViewHolder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerViewHolder> implements ItemTouchHelperAdapter {
 

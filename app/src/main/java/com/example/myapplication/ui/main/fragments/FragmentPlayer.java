@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.main;
+package com.example.myapplication.ui.main.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
@@ -18,14 +18,15 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.R;
-import com.example.myapplication.Saver;
+import com.example.myapplication.services.MetronomeService;
+import com.example.myapplication.ui.main.Saver;
+import com.example.myapplication.view.VerticalSeekBar;
 
 public class FragmentPlayer extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SoundPool.OnLoadCompleteListener, ServiceConnection, SeekBar.OnSeekBarChangeListener, TextView.OnEditorActionListener {
 
@@ -161,7 +162,6 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
                     metronomeService.play();
                 }
                 else {
-                    metronomeService.h.removeCallbacks(metronomeService.r);
                 }
                 break;
             case R.id.accent:

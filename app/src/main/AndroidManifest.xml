@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <service
-            android:name=".ui.main.MetronomeService"
+            android:name=".services.MetronomeService"
             android:enabled="true"
             android:exported="false" />
 
@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Saver"
+            android:name=".ui.main.Saver"
             android:theme="@style/Theme.AppCompat.Dialog" />
     </application>
 

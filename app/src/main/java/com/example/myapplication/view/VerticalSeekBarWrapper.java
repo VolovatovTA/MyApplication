@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.main;
+package com.example.myapplication.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;

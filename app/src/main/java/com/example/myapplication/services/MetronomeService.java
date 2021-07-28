@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.main;
+package com.example.myapplication.services;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -16,16 +16,17 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-
 import com.example.myapplication.R;
+import com.example.myapplication.database.Track;
+import com.example.myapplication.ui.main.fragments.FragmentPlayer;
 
-import java.util.Observable;
 import java.util.Observer;
+
+import rx.Observable;
 
 
 public class MetronomeService extends Service implements SoundPool.OnLoadCompleteListener {
-    Handler h;
+    public Handler h;
 
     public long current_bpm = 90;
     static String TAG = "Timofey";
@@ -76,14 +77,30 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        t = new Thread(r);
-        Observable observable = new Observable();
-        Observer observer = new Observer() {
+
+
+        Observable<Integer> observable = Observable.range(2, 4);
+        rx.Observer<Integer> observer = new rx.Observer<Integer>() {
             @Override
-            public void update(Observable o, Object arg) {
+            public void onCompleted() {
+                Log.d(TAG, "onCompleted");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d(TAG, "onError" + e);
+            }
+
+            @Override
+            public void onNext(Integer i) {
+                Log.d(TAG, "onNext " + i);
+                sp.play(soundId1, 1, 1, 1, 0, 1);
 
             }
         };
+        observable.subscribe(observer);
+
+
 
 
         Log.d(TAG, "startCommand");
@@ -131,32 +148,16 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
         return binder;
     }
 
-    class MyBinder extends Binder {
-        MetronomeService getService() {
+    public class MyBinder extends Binder {
+        public MetronomeService getService() {
             return MetronomeService.this;
         }
     }
 
     public void play() {
 
-        t.start();
     }
 
 
-    Runnable r = new Runnable() {
 
-        @Override
-        public void run() {
-
-            for (int i = 0; i < 10; i++) {
-                sp.play(soundId1, 1, 1, 1, 0, 1);
-                Log.d(TAG, "ThreadName = " + Thread.currentThread().getName());
-
-
-            }
-//                    h.postDelayed(this, 60000 / current_bpm);
-
-
-        }
-    };
 }

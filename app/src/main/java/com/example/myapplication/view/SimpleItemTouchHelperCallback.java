@@ -1,12 +1,12 @@
-package com.example.myapplication.ui.main;
+package com.example.myapplication.view;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.jetbrains.annotations.NotNull;
+import com.example.myapplication.adapters.ItemTouchHelperAdapter;
+import com.example.myapplication.ui.main.fragments.FragmentList;
 
 public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 

@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.main;
+package com.example.myapplication.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
@@ -7,6 +7,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.example.myapplication.R;
+import com.example.myapplication.ui.main.fragments.FragmentList;
+import com.example.myapplication.ui.main.fragments.FragmentPlayer;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to

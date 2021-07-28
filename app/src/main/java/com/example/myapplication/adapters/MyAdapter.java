@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -11,6 +11,9 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.myapplication.R;
+import com.example.myapplication.database.Track;
 
 import java.util.ArrayList;
 

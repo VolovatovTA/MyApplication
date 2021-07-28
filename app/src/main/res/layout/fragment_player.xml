@@ -117,11 +117,11 @@
         android:layout_gravity="center_horizontal"
         android:paddingBottom="10dp"
         android:paddingTop="10dp">
-    <com.example.myapplication.ui.main.VerticalSeekBarWrapper
+    <com.example.myapplication.view.VerticalSeekBarWrapper
         android:id="@+id/seekBarContainer1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.example.myapplication.ui.main.VerticalSeekBar
+        <com.example.myapplication.view.VerticalSeekBar
 
             android:id="@+id/seekBar1"
             android:layout_width="match_parent"
@@ -131,7 +131,7 @@
             android:thumb="@drawable/thumb_custom"
             app:seekBarRotation="CW270"/>
 
-    </com.example.myapplication.ui.main.VerticalSeekBarWrapper>
+    </com.example.myapplication.view.VerticalSeekBarWrapper>
 
     </RelativeLayout>
 
