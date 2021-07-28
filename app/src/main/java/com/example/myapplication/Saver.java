@@ -3,21 +3,16 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
-import com.example.myapplication.ui.main.DBHelper;
-import com.example.myapplication.ui.main.Track;
 
 public class Saver extends AppCompatActivity implements View.OnClickListener {
     String TAG = "lifecycle111";

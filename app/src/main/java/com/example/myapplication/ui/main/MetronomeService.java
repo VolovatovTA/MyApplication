@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -19,23 +20,25 @@ import androidx.annotation.Nullable;
 
 import com.example.myapplication.R;
 
+import java.util.Observable;
+import java.util.Observer;
+
 
 public class MetronomeService extends Service implements SoundPool.OnLoadCompleteListener {
-    public static final String ACTION_NONE = "5";
     Handler h;
 
-    public static long current_bpm;
+    public long current_bpm = 90;
     static String TAG = "Timofey";
     SoundPool sp;
     int soundId1;
-    public final static String ACTION_PLAY = "3";
-    public final static String ACTION_PAUSE = "4";
     private static final String CHANNEL_ID = "1";
-    boolean isPlaying = false;
-    Thread t;
+    //    boolean isPlaying = false;
+    public Thread t;
+    MyBinder binder = new MyBinder();
+
 
     public MetronomeService() {
-        Log.d(TAG, "constructor");
+        Log.d(TAG, " MetronomeService constructor");
     }
 
 
@@ -68,31 +71,26 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
 
     }
 
-
+    
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-
         t = new Thread(r);
-        t.start();
+        Observable observable = new Observable();
+        Observer observer = new Observer() {
+            @Override
+            public void update(Observable o, Object arg) {
+
+            }
+        };
+
+
         Log.d(TAG, "startCommand");
-        String action = intent.getAction();
 
 
         Notification notification = createNotification();
 
-        switch (action) {
-            case ACTION_PLAY:
-                startForeground(1338, notification);
-                isPlaying = true;
-                play();
-                break;
-            case ACTION_PAUSE:
-                isPlaying = false;
-                play();
-                break;
-        }
 
         return START_STICKY;
     }
@@ -128,39 +126,37 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
         Log.d(TAG, "onDestroy");
     }
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+    public IBinder onBind(Intent arg0) {
+        Log.d(TAG, "MyService onBind");
+        return binder;
+    }
+
+    class MyBinder extends Binder {
+        MetronomeService getService() {
+            return MetronomeService.this;
+        }
     }
 
     public void play() {
 
-
-        if (isPlaying){
-            Log.d(TAG, "play");
-
-            h.post(r);
-        }
-        else
-        {
-            Log.d(TAG, "stop");
-            h.removeCallbacks(r);
-
-        }
+        t.start();
     }
 
 
     Runnable r = new Runnable() {
-        long bpm = current_bpm;
 
         @Override
         public void run() {
-        if (isPlaying){
-            Log.d(TAG, "current_bpm = " + bpm);
-            h.postDelayed(this, 60000/bpm);
-            sp.play(soundId1, 1, 1, 0, 0, 1);
-        }
+
+            for (int i = 0; i < 10; i++) {
+                sp.play(soundId1, 1, 1, 1, 0, 1);
+                Log.d(TAG, "ThreadName = " + Thread.currentThread().getName());
+
+
+            }
+//                    h.postDelayed(this, 60000 / current_bpm);
+
+
         }
     };
 }

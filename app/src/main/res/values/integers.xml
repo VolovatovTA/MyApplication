@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="weight_of_button">100</integer>
+    <integer name="weight_of_space">107</integer>
+</resources>

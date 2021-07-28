@@ -1,7 +1,14 @@
-package com.example.myapplication;
+package com.example.myapplication.ui.main;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Binder;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
+
+import com.example.myapplication.R;
 import com.example.myapplication.databinding.ActivityMainBinding;
 import com.example.myapplication.ui.main.MetronomeService;
 import com.google.android.material.tabs.TabLayout;
@@ -25,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         binding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//                metronomeService.current_bpm = metronomeService.current_bpm++;
 
             }
 
@@ -61,16 +70,17 @@ public class MainActivity extends AppCompatActivity {
 
         binding.tabs.getTabAt(0).setText(R.string.metronom);
         binding.tabs.getTabAt(1).setText(R.string.list);
-        Intent intent = new Intent(this, MetronomeService.class);
-        intent.setAction(MetronomeService.ACTION_NONE);
 
-        startService(intent);
+//        Binder
 
     }
 
     @Override
     protected void onStart() {
+        Log.d("Timofey", "MainActivity onStart");
+
         super.onStart();
+//        startService(intent);
 
     }
 

@@ -26,7 +26,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.Saver;
-import com.example.myapplication.VerticalSeekBar;
 
 public class FragmentPlayer extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SoundPool.OnLoadCompleteListener, ServiceConnection, SeekBar.OnSeekBarChangeListener, TextView.OnEditorActionListener {
 
@@ -51,6 +50,9 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
     long millis;
     int statusOfLoadComplete = 0;
     public EditText bpm_EditText;
+    boolean bound;
+    ServiceConnection sConn;
+    public MetronomeService metronomeService;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -72,7 +74,7 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
         tap = rootView.findViewById(R.id.tap);
         saveInList = rootView.findViewById(R.id.saveList);
         bpm_EditText = rootView.findViewById(R.id.editTextNumber);
-        verticalSeekBar = rootView.findViewById(R.id.seekBar);
+        verticalSeekBar = rootView.findViewById(R.id.seekBar1);
 
         compoundButton_play = rootView.findViewById((R.id.play));
         compoundButton_accent = rootView.findViewById((R.id.accent));
@@ -98,7 +100,26 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
         btn_10p.setOnClickListener(this);
         tap.setOnClickListener(this);
         saveInList.setOnClickListener(this);
-        MetronomeService.current_bpm = 90;
+        intent = new Intent(getContext(), MetronomeService.class);
+        getActivity().startService(intent);
+
+
+//        intent.setAction(MetronomeService.ACTION_NONE);
+
+
+        sConn = new ServiceConnection() {
+
+            public void onServiceConnected(ComponentName name, IBinder binder) {
+                Log.d("Timofey", "MainActivity onServiceConnected");
+                bound = true;
+                metronomeService = ((MetronomeService.MyBinder) binder).getService();
+            }
+
+            public void onServiceDisconnected(ComponentName name) {
+                Log.d("Timofey", "MainActivity onServiceDisconnected");
+                bound = false;
+            }
+        };
         return rootView;
     }
 
@@ -133,40 +154,24 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        intent = new Intent(getContext(), MetronomeService.class);
 
         switch (buttonView.getId()) {
             case R.id.play:
-                if (isChecked) {
-
-
-                    intent.setAction(MetronomeService.ACTION_PLAY);
-
-                    Log.d(TAG, "playing");
-                } else {
-
-                    intent.setAction(MetronomeService.ACTION_PAUSE);
+                if (isChecked){
+                    metronomeService.play();
                 }
-
+                else {
+                    metronomeService.h.removeCallbacks(metronomeService.r);
+                }
                 break;
             case R.id.accent:
 
                 break;
         }
-        getActivity().startService(intent);
-//        MetronomeService metronomeService = getActivity().getSer
 
     }
 
-    private void play() {
-        Toast toast;
-        String message;
-        if (statusOfLoadComplete == 1) message = "Загрузили";
-        else message = "Секундочку, подгружаем звуки";
-        toast = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
-        toast.show();
 
-    }
 
     @SuppressLint("WrongConstant")
     @Override
@@ -190,10 +195,12 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        int bpm = seekBar.getProgress();
+//        int bpm = seekBar.getProgress();
         bpm_EditText.setText(String.valueOf(seekBar.getProgress()));
+        metronomeService.current_bpm = seekBar.getProgress();
+        Log.d(TAG, "current bpm = " + metronomeService.current_bpm);
 
-        MetronomeService.current_bpm = bpm;
+
 
     }
 
@@ -205,6 +212,20 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().bindService(intent, sConn, 0);
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getActivity().unbindService(sConn);
 
     }
 
