@@ -28,6 +28,8 @@ import com.example.myapplication.services.MetronomeService;
 import com.example.myapplication.ui.main.Saver;
 import com.example.myapplication.view.VerticalSeekBar;
 
+import rx.schedulers.Schedulers;
+
 public class FragmentPlayer extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SoundPool.OnLoadCompleteListener, ServiceConnection, SeekBar.OnSeekBarChangeListener, TextView.OnEditorActionListener {
 
     String TAG = "Timofey";
@@ -162,6 +164,8 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
                     metronomeService.play();
                 }
                 else {
+                    Schedulers.shutdown();
+
                 }
                 break;
             case R.id.accent:

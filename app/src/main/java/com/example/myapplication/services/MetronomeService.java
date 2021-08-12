@@ -14,15 +14,20 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.util.TimeUtils;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
 import com.example.myapplication.database.Track;
 import com.example.myapplication.ui.main.fragments.FragmentPlayer;
 
+import java.sql.Time;
 import java.util.Observer;
+import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 
 public class MetronomeService extends Service implements SoundPool.OnLoadCompleteListener {
@@ -46,22 +51,21 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
     public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
         Toast t = Toast.makeText(getBaseContext(), R.string.textLoadComplete, Toast.LENGTH_SHORT);
         t.show();
+
     }
 
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "onCreate");
+        Log.d(TAG, "MetronomeService onCreate");
         h = new Handler();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 sp = new SoundPool.Builder()
                         .setMaxStreams(100)
                         .setAudioAttributes(new AudioAttributes.Builder()
-                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                                .setUsage(AudioAttributes.USAGE_MEDIA)
-                                .setFlags(AudioAttributes.FLAG_LOW_LATENCY)
+                                .setFlags(AudioAttributes.CONTENT_TYPE_MUSIC)
                                 .build())
                         .build();
             }
@@ -72,38 +76,37 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
 
     }
 
-    
+
+    rx.Observer<Integer> observer = new rx.Observer<Integer>() {
+        @Override
+        public void onCompleted() {
+            Log.d(TAG, "onCompleted");
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Log.d(TAG, "onError" + e);
+        }
+
+        @Override
+        public void onNext(Integer i) {
+            Log.d(TAG, "onNext " + i);
+            Log.d(TAG, "Thread " + Thread.currentThread());
+            try {
+                TimeUnit.MILLISECONDS.sleep(60000/current_bpm);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            sp.play(soundId1, 1, 1, 1, 0, 1);
+
+        }
+    };
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-
-
-        Observable<Integer> observable = Observable.range(2, 4);
-        rx.Observer<Integer> observer = new rx.Observer<Integer>() {
-            @Override
-            public void onCompleted() {
-                Log.d(TAG, "onCompleted");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.d(TAG, "onError" + e);
-            }
-
-            @Override
-            public void onNext(Integer i) {
-                Log.d(TAG, "onNext " + i);
-                sp.play(soundId1, 1, 1, 1, 0, 1);
-
-            }
-        };
-        observable.subscribe(observer);
-
-
-
-
         Log.d(TAG, "startCommand");
+
+
 
 
         Notification notification = createNotification();
@@ -155,6 +158,14 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
     }
 
     public void play() {
+        Observable<Integer> observable = Observable.range(0,100)
+                .subscribeOn(Schedulers.newThread());
+
+
+        observable.subscribe(observer);
+
+
+
 
     }
 
