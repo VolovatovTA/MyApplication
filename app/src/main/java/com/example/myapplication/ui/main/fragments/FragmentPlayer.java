@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -19,16 +20,24 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.R;
+import com.example.myapplication.database.Track;
 import com.example.myapplication.services.MetronomeService;
 import com.example.myapplication.ui.main.Saver;
 import com.example.myapplication.view.VerticalSeekBar;
 
-import rx.schedulers.Schedulers;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FragmentPlayer extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SoundPool.OnLoadCompleteListener, ServiceConnection, SeekBar.OnSeekBarChangeListener, TextView.OnEditorActionListener {
 
@@ -106,10 +115,6 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
         intent = new Intent(getContext(), MetronomeService.class);
         getActivity().startService(intent);
 
-
-//        intent.setAction(MetronomeService.ACTION_NONE);
-
-
         sConn = new ServiceConnection() {
 
             public void onServiceConnected(ComponentName name, IBinder binder) {
@@ -150,6 +155,8 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
             intent1.putExtra("accent", compoundButton_accent.isChecked());
             intent1.putExtra("number_share", 4);
             intent1.putExtra("number_sounds", 4);
+            startActivityForResult(intent1, 1);
+
             startActivity(intent1);
         }
     }
@@ -161,11 +168,12 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
         switch (buttonView.getId()) {
             case R.id.play:
                 if (isChecked){
+
                     metronomeService.play();
+
                 }
                 else {
-                    Schedulers.shutdown();
-
+                    metronomeService.stop();
                 }
                 break;
             case R.id.accent:

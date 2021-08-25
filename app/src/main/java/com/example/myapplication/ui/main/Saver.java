@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,11 +16,17 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.myapplication.R;
+import com.example.myapplication.adapters.RecyclerListAdapter;
 import com.example.myapplication.database.Track;
 import com.example.myapplication.database.DBHelper;
+import com.example.myapplication.ui.main.fragments.FragmentList;
+
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
 
 public class Saver extends AppCompatActivity implements View.OnClickListener {
-    String TAG = "lifecycle111";
+    String TAG = "Timofey";
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     EditText name;
     Button save, cancel;
@@ -79,7 +86,17 @@ public class Saver extends AppCompatActivity implements View.OnClickListener {
 
             database.insert(DBHelper.TABLE_TRACKS, null, contentValues);
 
-            this.finish();
+            Cursor cursor = database.query(DBHelper.TABLE_TRACKS, null, null, null, null, null, null);
+            cursor.moveToLast();
+            Log.d(TAG, "Last number in Saver = " + cursor.getInt(0));
+//            Track new_track = new Track(name_of_track,(int) freq, isAccentOn, count1, count2, cursor.getPosition());
+//            Observable<Track> observable = Observable.just(new_track);
+//            observable.subscribe(observer);
+
+            Intent intent = new Intent();
+            intent.putExtra("isAdd", true);
+            setResult(RESULT_OK, intent);
+            finish();
         }
         else if (view.getId() == R.id.cancel_button) {
 //            @SuppressLint("Recycle") Cursor cursor = database.query(DBHelper.TABLE_TRACKS, null,null, null, null, null,null);
@@ -99,6 +116,10 @@ public class Saver extends AppCompatActivity implements View.OnClickListener {
 //                dbHelper.close();
 //            }
 //            cursor.close();
+            Intent intent = new Intent();
+            intent.putExtra("isAdd", false);
+            setResult(RESULT_CANCELED, intent);
+            finish();
             this.finish();
         }
     }

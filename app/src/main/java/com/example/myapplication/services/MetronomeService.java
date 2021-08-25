@@ -14,23 +14,21 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.util.TimeUtils;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.example.myapplication.R;
-import com.example.myapplication.database.Track;
 import com.example.myapplication.ui.main.fragments.FragmentPlayer;
 
-import java.sql.Time;
-import java.util.Observer;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-import rx.Observable;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+
+import rx.Subscription;
 
 
-public class MetronomeService extends Service implements SoundPool.OnLoadCompleteListener {
+public class MetronomeService extends Service implements SoundPool.OnLoadCompleteListener, Runnable {
     public Handler h;
 
     public long current_bpm = 90;
@@ -38,7 +36,7 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
     SoundPool sp;
     int soundId1;
     private static final String CHANNEL_ID = "1";
-    //    boolean isPlaying = false;
+    public boolean isPlaying = false;
     public Thread t;
     MyBinder binder = new MyBinder();
 
@@ -76,31 +74,6 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
 
     }
 
-
-    rx.Observer<Integer> observer = new rx.Observer<Integer>() {
-        @Override
-        public void onCompleted() {
-            Log.d(TAG, "onCompleted");
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            Log.d(TAG, "onError" + e);
-        }
-
-        @Override
-        public void onNext(Integer i) {
-            Log.d(TAG, "onNext " + i);
-            Log.d(TAG, "Thread " + Thread.currentThread());
-            try {
-                TimeUnit.MILLISECONDS.sleep(60000/current_bpm);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            sp.play(soundId1, 1, 1, 1, 0, 1);
-
-        }
-    };
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -151,6 +124,19 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
         return binder;
     }
 
+    @Override
+    public void run() {
+        while (isPlaying){
+            sp.play(soundId1,1,1,1,0,1);
+            try {
+                Thread.sleep(60000/current_bpm);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
     public class MyBinder extends Binder {
         public MetronomeService getService() {
             return MetronomeService.this;
@@ -158,15 +144,15 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
     }
 
     public void play() {
-        Observable<Integer> observable = Observable.range(0,100)
-                .subscribeOn(Schedulers.newThread());
+        t = new Thread(this);
+//        t.setPriority(Thread.MAX_PRIORITY);
+        isPlaying = true;
+        t.start();
 
 
-        observable.subscribe(observer);
-
-
-
-
+    }
+    public void stop(){
+        isPlaying = false;
     }
 
 

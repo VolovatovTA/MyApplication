@@ -32,7 +32,7 @@ import java.util.ArrayList;
 
 public class FragmentLibrary extends Fragment {
 
-    String TAG = "lifecycle111";
+    String TAG = "Timofey";
     DBHelper dbHelper;
     ListView lvList;
     TextView defaultText;
@@ -197,43 +197,6 @@ public class FragmentLibrary extends Fragment {
     }
 
     public ArrayList<Track> CreateTrackList() {
-        ArrayList<Track> tracks = null;
-
-        if (database == null) {
-            database = (dbHelper).getWritableDatabase();
-        }
-        cursor = database.query(DBHelper.TABLE_TRACKS, null, null, null, null, null, null);
-        if (cursor != null) {
-            count_of_tracks = cursor.getCount();
-
-            names = new String[count_of_tracks];
-            acc = new boolean[count_of_tracks];
-            count1 = new int[count_of_tracks];
-            count2 = new int[count_of_tracks];
-            temp = new int[count_of_tracks];
-            ides = new int[count_of_tracks];
-
-
-            if (cursor.moveToFirst()) {
-                int j = 0;
-                do {
-                    names[j] = cursor.getString(cursor.getColumnIndex(DBHelper.KEY_NAME));
-                    temp[j] = cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_TEMP));
-                    acc[j] = cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_ACCENT)) != 0;
-                    count1[j] = cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_COUNT1));
-                    count2[j] = cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_COUNT2));
-                    ides[j] = cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_ID));
-                    j++;
-                } while (cursor.moveToNext());
-
-                tracks = new ArrayList<>(cursor.getCount());
-
-                for (int i = 0; i < cursor.getCount(); i++) {
-                    tracks.add(new Track(names[i], temp[i], acc[i], count1[i], count2[i], ides[i]));
-                }
-
-            }
-        }
 
         return tracks;
     }
