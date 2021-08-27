@@ -21,6 +21,13 @@ import com.example.myapplication.database.Repository;
 import com.example.myapplication.ui.main.fragments.FragmentPlayer;
 
 
+import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
+
+
+import rx.Subscription;
+
+
 public class MetronomeService extends Service implements SoundPool.OnLoadCompleteListener, Runnable {
     public Handler h;
 
