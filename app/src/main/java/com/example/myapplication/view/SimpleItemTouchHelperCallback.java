@@ -2,20 +2,24 @@ package com.example.myapplication.view;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.adapters.ItemTouchHelperAdapter;
+import com.example.myapplication.database.Repository;
 import com.example.myapplication.ui.main.fragments.FragmentList;
 
 public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     private final ItemTouchHelperAdapter mAdapter;
+    private Repository repository = Repository.getInstance();
 
     public SimpleItemTouchHelperCallback(ItemTouchHelperAdapter adapter) {
         Log.d(FragmentList.TAG, "onCreateView");
         mAdapter = adapter;
     }
+
 
     @Override
     public boolean isLongPressDragEnabled() {
@@ -48,7 +52,11 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
         return true;
     }
 
-
+    @Override
+    public void onMoved(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, int fromPos, @NonNull RecyclerView.ViewHolder target, int toPos, int x, int y) {
+        super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y);
+        repository.swap(fromPos, toPos);
+    }
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {

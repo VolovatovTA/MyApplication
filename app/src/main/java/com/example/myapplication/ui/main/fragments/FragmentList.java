@@ -1,8 +1,6 @@
 package com.example.myapplication.ui.main.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +39,7 @@ public class FragmentList extends Fragment  {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        myAdapter = new RecyclerListAdapter(getContext());
+        myAdapter = new RecyclerListAdapter(getActivity().getBaseContext());
         recyclerView.setAdapter(myAdapter);
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(myAdapter);

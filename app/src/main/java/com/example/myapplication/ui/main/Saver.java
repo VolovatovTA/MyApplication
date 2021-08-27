@@ -17,6 +17,7 @@ import android.widget.EditText;
 
 import com.example.myapplication.R;
 import com.example.myapplication.adapters.RecyclerListAdapter;
+import com.example.myapplication.database.Repository;
 import com.example.myapplication.database.Track;
 import com.example.myapplication.database.DBHelper;
 import com.example.myapplication.ui.main.fragments.FragmentList;
@@ -30,7 +31,6 @@ public class Saver extends AppCompatActivity implements View.OnClickListener {
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     EditText name;
     Button save, cancel;
-    DBHelper dbHelper;
     long freq;
     boolean isAccentOn;
     int count1, count2;
@@ -58,7 +58,6 @@ public class Saver extends AppCompatActivity implements View.OnClickListener {
         cancel = findViewById(R.id.cancel_button);
         cancel.setOnClickListener(this);
 
-        dbHelper = new DBHelper(this);
 
 
     }
@@ -69,21 +68,13 @@ public class Saver extends AppCompatActivity implements View.OnClickListener {
 
 
         String name_of_track = name.getText().toString();
-        SQLiteDatabase database = dbHelper.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
 
         if (view.getId() == R.id.saveLIST){
             Log.d(TAG, name.getText().toString());
 
-            contentValues.put(DBHelper.KEY_NAME, name_of_track);
-            contentValues.put(DBHelper.KEY_TEMP, (int) freq);
-            int acc;
-            if (isAccentOn) acc = 1;
-            else acc = 0;
-            contentValues.put(DBHelper.KEY_ACCENT, acc);
-            contentValues.put(DBHelper.KEY_COUNT1, count1);
-            contentValues.put(DBHelper.KEY_COUNT2, count2);
 
+
+            Repository.getInstance().putTrack(new Track(name_of_track, (int) freq, isAccentOn, count1, count2, 0, 0));
             database.insert(DBHelper.TABLE_TRACKS, null, contentValues);
 
             Cursor cursor = database.query(DBHelper.TABLE_TRACKS, null, null, null, null, null, null);
@@ -123,10 +114,5 @@ public class Saver extends AppCompatActivity implements View.OnClickListener {
             this.finish();
         }
     }
-    public static LiveData<Track> getData() {
-        MutableLiveData<Track> liveData = new MutableLiveData<>();
 
-        liveData.setValue(new Track("ss", 1, false, 1, 1, 1));
-        return liveData;
-    }
 }
