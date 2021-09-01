@@ -74,43 +74,11 @@ public class Saver extends AppCompatActivity implements View.OnClickListener {
 
 
 
-            Repository.getInstance().putTrack(new Track(name_of_track, (int) freq, isAccentOn, count1, count2, 0, 0));
-            database.insert(DBHelper.TABLE_TRACKS, null, contentValues);
+            Repository.getInstance().putTrack(new Track(name_of_track, (int) freq, isAccentOn, count1, count2, -1, -1));
 
-            Cursor cursor = database.query(DBHelper.TABLE_TRACKS, null, null, null, null, null, null);
-            cursor.moveToLast();
-            Log.d(TAG, "Last number in Saver = " + cursor.getInt(0));
-//            Track new_track = new Track(name_of_track,(int) freq, isAccentOn, count1, count2, cursor.getPosition());
-//            Observable<Track> observable = Observable.just(new_track);
-//            observable.subscribe(observer);
-
-            Intent intent = new Intent();
-            intent.putExtra("isAdd", true);
-            setResult(RESULT_OK, intent);
-            finish();
+            this.finish();
         }
         else if (view.getId() == R.id.cancel_button) {
-//            @SuppressLint("Recycle") Cursor cursor = database.query(DBHelper.TABLE_TRACKS, null,null, null, null, null,null);
-//
-//            if (cursor.moveToFirst()){
-//                int idIndex = cursor.getColumnIndex(DBHelper.KEY_ID);
-//                int nameIndex = cursor.getColumnIndex(DBHelper.KEY_NAME);
-//                int tempIndex = cursor.getColumnIndex(DBHelper.KEY_TEMP);
-//                do {
-//                    Log.d(TAG, "id = " + cursor.getString(idIndex) +
-//                            ", name = " + cursor.getString(nameIndex) +
-//                            ", temp = " + cursor.getString((tempIndex)));
-//                } while (cursor.moveToNext());}
-//
-//            else {
-//                Log.d(TAG, "Ничё нет");
-//                dbHelper.close();
-//            }
-//            cursor.close();
-            Intent intent = new Intent();
-            intent.putExtra("isAdd", false);
-            setResult(RESULT_CANCELED, intent);
-            finish();
             this.finish();
         }
     }

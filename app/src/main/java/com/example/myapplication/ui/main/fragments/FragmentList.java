@@ -54,6 +54,7 @@ public class FragmentList extends Fragment  {
     @Override
     public void onResume() {
 
+        myAdapter.updateTrackList();
 
 
 

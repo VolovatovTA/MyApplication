@@ -146,7 +146,6 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
             intent1.putExtra("accent", compoundButton_accent.isChecked());
             intent1.putExtra("number_share", 4);
             intent1.putExtra("number_sounds", 4);
-            startActivityForResult(intent1, 1);
 
             startActivity(intent1);
         }
