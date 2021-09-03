@@ -18,6 +18,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String KEY_COUNT1 = "count1";
     public static final String KEY_COUNT2 = "count2";
     public static final String KEY_ACCENT = "acc";
+    public static final String KEY_POSITION = "position";
 
     public DBHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -26,8 +27,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("create table " + TABLE_TRACKS + "(" + KEY_ID + " integer primary key,"
-                + KEY_NAME + " text," + KEY_TEMP + " integer,"+ KEY_ACCENT + " integer," + KEY_COUNT1 + " integer," + KEY_COUNT2 + " integer" + ")");
+        sqLiteDatabase.execSQL("create table " + TABLE_TRACKS + "(" + KEY_ID + " integer primary key," + KEY_POSITION + " integer," + KEY_NAME + " text," + KEY_TEMP + " integer,"+ KEY_ACCENT + " integer," + KEY_COUNT1 + " integer," + KEY_COUNT2 + " integer" + ")");
 
     }
 

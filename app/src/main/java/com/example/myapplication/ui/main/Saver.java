@@ -17,6 +17,7 @@ import android.widget.EditText;
 
 import com.example.myapplication.R;
 import com.example.myapplication.adapters.RecyclerListAdapter;
+import com.example.myapplication.database.Repository;
 import com.example.myapplication.database.Track;
 import com.example.myapplication.database.DBHelper;
 import com.example.myapplication.ui.main.fragments.FragmentList;
@@ -30,7 +31,6 @@ public class Saver extends AppCompatActivity implements View.OnClickListener {
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     EditText name;
     Button save, cancel;
-    DBHelper dbHelper;
     long freq;
     boolean isAccentOn;
     int count1, count2;
@@ -49,7 +49,6 @@ public class Saver extends AppCompatActivity implements View.OnClickListener {
         count1 = intent.getIntExtra("number_sounds", 4);
         count2 = intent.getIntExtra("number_share", 4);
 
-        Log.d(TAG, freq + "");
 
         name = findViewById(R.id.Name);
         save = findViewById(R.id.saveLIST);
@@ -58,7 +57,6 @@ public class Saver extends AppCompatActivity implements View.OnClickListener {
         cancel = findViewById(R.id.cancel_button);
         cancel.setOnClickListener(this);
 
-        dbHelper = new DBHelper(this);
 
 
     }
@@ -69,64 +67,19 @@ public class Saver extends AppCompatActivity implements View.OnClickListener {
 
 
         String name_of_track = name.getText().toString();
-        SQLiteDatabase database = dbHelper.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
 
         if (view.getId() == R.id.saveLIST){
             Log.d(TAG, name.getText().toString());
 
-            contentValues.put(DBHelper.KEY_NAME, name_of_track);
-            contentValues.put(DBHelper.KEY_TEMP, (int) freq);
-            int acc;
-            if (isAccentOn) acc = 1;
-            else acc = 0;
-            contentValues.put(DBHelper.KEY_ACCENT, acc);
-            contentValues.put(DBHelper.KEY_COUNT1, count1);
-            contentValues.put(DBHelper.KEY_COUNT2, count2);
 
-            database.insert(DBHelper.TABLE_TRACKS, null, contentValues);
 
-            Cursor cursor = database.query(DBHelper.TABLE_TRACKS, null, null, null, null, null, null);
-            cursor.moveToLast();
-            Log.d(TAG, "Last number in Saver = " + cursor.getInt(0));
-//            Track new_track = new Track(name_of_track,(int) freq, isAccentOn, count1, count2, cursor.getPosition());
-//            Observable<Track> observable = Observable.just(new_track);
-//            observable.subscribe(observer);
+            Repository.getInstance().putTrack(new Track(name_of_track, (int) freq, isAccentOn, count1, count2, -1, -1));
 
-            Intent intent = new Intent();
-            intent.putExtra("isAdd", true);
-            setResult(RESULT_OK, intent);
-            finish();
+            this.finish();
         }
         else if (view.getId() == R.id.cancel_button) {
-//            @SuppressLint("Recycle") Cursor cursor = database.query(DBHelper.TABLE_TRACKS, null,null, null, null, null,null);
-//
-//            if (cursor.moveToFirst()){
-//                int idIndex = cursor.getColumnIndex(DBHelper.KEY_ID);
-//                int nameIndex = cursor.getColumnIndex(DBHelper.KEY_NAME);
-//                int tempIndex = cursor.getColumnIndex(DBHelper.KEY_TEMP);
-//                do {
-//                    Log.d(TAG, "id = " + cursor.getString(idIndex) +
-//                            ", name = " + cursor.getString(nameIndex) +
-//                            ", temp = " + cursor.getString((tempIndex)));
-//                } while (cursor.moveToNext());}
-//
-//            else {
-//                Log.d(TAG, "Ничё нет");
-//                dbHelper.close();
-//            }
-//            cursor.close();
-            Intent intent = new Intent();
-            intent.putExtra("isAdd", false);
-            setResult(RESULT_CANCELED, intent);
-            finish();
             this.finish();
         }
     }
-    public static LiveData<Track> getData() {
-        MutableLiveData<Track> liveData = new MutableLiveData<>();
 
-        liveData.setValue(new Track("ss", 1, false, 1, 1, 1));
-        return liveData;
-    }
 }

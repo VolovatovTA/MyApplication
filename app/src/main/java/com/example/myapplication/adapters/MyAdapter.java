@@ -21,7 +21,7 @@ public class MyAdapter extends BaseAdapter {
     LayoutInflater lInflater;
     ArrayList<Track> tracksList = new ArrayList<Track>();
     boolean isSelectionMode;
-    Track t_default = new Track("", 90, false, 4, 4, 0);
+    Track t_default = new Track("", 90, false, 4, 4,0,  0);
 
     public MyAdapter(Context context, ArrayList<Track> tracksList_) {
         lInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

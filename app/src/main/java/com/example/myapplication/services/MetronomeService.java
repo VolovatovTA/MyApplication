@@ -16,10 +16,10 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
 import com.example.myapplication.R;
+import com.example.myapplication.database.Repository;
 import com.example.myapplication.ui.main.fragments.FragmentPlayer;
+
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
@@ -32,6 +32,7 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
     public Handler h;
 
     public long current_bpm = 90;
+
     static String TAG = "Timofey";
     SoundPool sp;
     int soundId1;
@@ -53,6 +54,7 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
     }
 
 
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -70,8 +72,6 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
         } else sp = new SoundPool(100, AudioManager.STREAM_MUSIC, 0);
         soundId1 = sp.load(getBaseContext(), R.raw.wood, 0);
         sp.setOnLoadCompleteListener(this);
-
-
     }
 
 
