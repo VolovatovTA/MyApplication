@@ -11,11 +11,13 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -24,9 +26,11 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.R;
+import com.example.myapplication.database.Repository;
 import com.example.myapplication.services.MetronomeService;
 import com.example.myapplication.ui.main.Saver;
 import com.example.myapplication.view.VerticalSeekBar;
+import com.google.android.material.slider.Slider;
 
 
 public class FragmentPlayer extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SoundPool.OnLoadCompleteListener, ServiceConnection, SeekBar.OnSeekBarChangeListener, TextView.OnEditorActionListener {
@@ -39,6 +43,8 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
     Button btn_1p;
     Button btn_5p;
     Button btn_10p;
+    Button count1;
+    Button count2;
     Button tap;
     Button saveInList;
     Intent intent;
@@ -73,6 +79,8 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
         btn_1p = rootView.findViewById(R.id.bn1p);
         btn_5p = rootView.findViewById(R.id.bn5p);
         btn_10p = rootView.findViewById(R.id.bn10p);
+        count1 = rootView.findViewById(R.id.count1);
+        count2 = rootView.findViewById(R.id.count2);
         tap = rootView.findViewById(R.id.tap);
         saveInList = rootView.findViewById(R.id.saveList);
         bpm_EditText = rootView.findViewById(R.id.editTextNumber);
@@ -101,6 +109,8 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
         btn_5p.setOnClickListener(this);
         btn_10p.setOnClickListener(this);
         tap.setOnClickListener(this);
+        count1.setOnClickListener(this);
+        count2.setOnClickListener(this);
         saveInList.setOnClickListener(this);
         intent = new Intent(getContext(), MetronomeService.class);
         getActivity().startService(intent);
@@ -126,6 +136,8 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
     @Override
     public void onClick(View v) {
 
+
+
         if (v.getId() == R.id.bn1m) {
             verticalSeekBar.setProgress(verticalSeekBar.getProgress() - 1);
         } else if (v.getId() == R.id.bn5m) {
@@ -141,13 +153,14 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
         } else if (v.getId() == R.id.tap) {
             millis = System.currentTimeMillis();
         } else if (v.getId() == R.id.saveList) {
-            Intent intent1 = new Intent(getActivity(), Saver.class);
-            intent1.putExtra("temp", verticalSeekBar.getProgress());
-            intent1.putExtra("accent", compoundButton_accent.isChecked());
-            intent1.putExtra("number_share", 4);
-            intent1.putExtra("number_sounds", 4);
-
-            startActivity(intent1);
+            Intent intent = new Intent(getActivity(), Saver.class);
+            intent.putExtra("temp", verticalSeekBar.getProgress());
+            intent.putExtra("accent", compoundButton_accent.isChecked());
+            intent.putExtra("number_share", 4);
+            intent.putExtra("number_sounds", 4);
+            startActivity(intent);
+        } else if (v.getId() == R.id.count1){
+            ;
         }
     }
 
@@ -158,16 +171,13 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
         switch (buttonView.getId()) {
             case R.id.play:
                 if (isChecked){
-
                     metronomeService.play();
-
                 }
                 else {
                     metronomeService.stop();
                 }
                 break;
             case R.id.accent:
-
                 break;
         }
 
@@ -234,7 +244,8 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        metronomeService.stopSelf();
+        metronomeService.stopSelf();
+        Repository.getInstance().close();
         Log.d(TAG, "onDestroy FragmentPlayer");
 
     }
