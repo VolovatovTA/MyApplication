@@ -49,7 +49,6 @@ public class Saver extends AppCompatActivity implements View.OnClickListener {
         count1 = intent.getIntExtra("number_sounds", 4);
         count2 = intent.getIntExtra("number_share", 4);
 
-        Log.d(TAG, freq + "");
 
         name = findViewById(R.id.Name);
         save = findViewById(R.id.saveLIST);

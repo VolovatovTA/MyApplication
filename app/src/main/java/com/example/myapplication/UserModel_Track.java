@@ -1,10 +1,16 @@
 package com.example.myapplication;
 
+import static com.google.common.primitives.Ints.max;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.util.Log;
+import android.view.SurfaceControl;
+
+import androidx.annotation.RequiresApi;
 
 import com.example.myapplication.adapters.Notifyer;
 import com.example.myapplication.database.DBHelper;
@@ -12,6 +18,7 @@ import com.example.myapplication.database.Track;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 import io.reactivex.rxjava3.core.Observable;
 
@@ -20,30 +27,31 @@ public class UserModel_Track {
     public Cursor cursor;
     SQLiteDatabase database = null;
     DBHelper dbHelper;
-
+    ArrayList<Track> tracks;
 
     public UserModel_Track() {
         Log.d(TAG, "UserModel_track constructor");
 
     }
 
-    ArrayList<Track> tracks;
-
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public ArrayList<Track> getTracks(Context context) {
         dbHelper = new DBHelper(context);
         if (database == null) {
             database = (dbHelper).getWritableDatabase();
         }
 
+
         cursor = database.query(DBHelper.TABLE_TRACKS, null, null, null, null, null, null);
 
         if (cursor.getCount() != 0) {
             cursor.moveToFirst();
 
-            tracks = new ArrayList<>(cursor.getCount());
+            tracks = new ArrayList<>();
 
             do {
 
+                Log.d(TAG, "position = " + cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_POSITION)) + "; id = " + cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_ID)));
                 tracks.add(new Track(cursor.getString(cursor.getColumnIndex(DBHelper.KEY_NAME)),
                         cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_TEMP)),
                         cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_ACCENT)) != 0,
@@ -51,7 +59,16 @@ public class UserModel_Track {
                         cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_COUNT2)),
                         cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_POSITION)),
                         cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_ID))));
+
             } while (cursor.moveToNext());
+
+            tracks.sort(new Comparator<Track>() {
+                @Override
+                public int compare(Track track, Track t1) {
+                    return Integer.compare(track.position, t1.position);
+                }
+            });
+
 
         }
         else{
@@ -65,19 +82,47 @@ public class UserModel_Track {
         int id = tracks.get(position).id;
         tracks.remove(position);
         database.delete(DBHelper.TABLE_TRACKS, "id = " + id, null);
+        database.beginTransaction();
+        try {
+            ContentValues cv = new ContentValues();
+
+            for (int i = position; i < tracks.size(); i++){
+                cv.put(DBHelper.KEY_POSITION, i);
+                id = tracks.get(i).id;
+                database.update(DBHelper.TABLE_TRACKS, cv, "id = ?", new String[]{id + ""});
+            }
+
+            database.setTransactionSuccessful();
+        }finally {
+            database.endTransaction();
+        }
         Log.d(TAG, "Track was delete... Id = " + id);
     }
 
     public void swap(int fromPos, int toPos) {
+
+        Log.d(TAG, "tracks.fromPos = " + tracks.get(fromPos).position + "; tracks.toPos = " + tracks.get(toPos).position);
+
         ContentValues cv_from = new ContentValues();
         ContentValues cv_to = new ContentValues();
+
         cv_from.put(DBHelper.KEY_POSITION, fromPos);
         cv_to.put(DBHelper.KEY_POSITION, toPos);
 
+
+        int id_fromPos = tracks.get(fromPos).id;
+        int id_toPos = tracks.get(toPos).id;
+        Log.d(TAG, "id_from = " + id_fromPos + "; id_to = " + id_toPos);
+        database.beginTransaction();
+        try {
+            database.update(DBHelper.TABLE_TRACKS, cv_to, "id = ?",  new String[]{id_fromPos + ""});
+            database.update(DBHelper.TABLE_TRACKS, cv_from, "id = ?", new String[]{id_toPos + ""});
+            database.setTransactionSuccessful();
+        } finally { database.endTransaction();}
+
+
         Collections.swap(tracks, fromPos, toPos);
 
-        database.update(DBHelper.TABLE_TRACKS, cv_to, " position = ?", new String[]{fromPos + ""});
-        database.update(DBHelper.TABLE_TRACKS, cv_from, " position = ?", new String[]{toPos + ""});
     }
 
     public void close() {
@@ -87,25 +132,24 @@ public class UserModel_Track {
 
     public void putTrack(Track track) {
         if (track.position == -1 || track.id == -1) {
-            Log.d(TAG, "tracks.size() = " + tracks.size());
-            Log.d(TAG, "tracks = " + tracks);
-
             if (tracks != null & tracks.size() != 0) {
                 // position started from 1
-                track.position = tracks.size() + 1;
+                track.position = tracks.size();
                 // ides started from 0
-                track.id = tracks.get(tracks.size() - 1).id + 1;
+                int[] id = new int[tracks.size()];
+                for (int i = 0; i < tracks.size(); i++){
+                    id[i] = tracks.get(i).id;
+                }
+                track.id = max(id) + 1;
             }
             else {
-                track.position = 1;
+                track.position = 0;
                 // ides started from 0
                 track.id = 0;
             }
 
         }
-        for (int i = 0; i < tracks.size(); i++) {
-            Log.d(TAG, "id = " + tracks.get(i).id + "position = " + tracks.get(i).position);
-        }
+
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(DBHelper.KEY_NAME, track.name);
@@ -122,7 +166,6 @@ public class UserModel_Track {
         contentValues.put(DBHelper.KEY_ID, track.id);
         contentValues.put(DBHelper.KEY_POSITION, track.position);
 
-        Log.d(TAG, "Track is put. Id = " + track.id);
         tracks.add(track);
         database.insert(DBHelper.TABLE_TRACKS, null, contentValues);
     }

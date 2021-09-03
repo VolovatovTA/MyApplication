@@ -25,6 +25,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     Repository repository = Repository.getInstance();
     Context context;
     ArrayList<Track> tracks;
+
     public RecyclerListAdapter(Context context) {
         this.context = context;
         tracks = repository.getFromDataBase(context);
@@ -41,25 +42,20 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
         Log.d(FragmentList.TAG, "onItemMove");
+        Log.d(TAG, "fromPos = " + fromPosition + "; toPos = " + toPosition);
 
         if (fromPosition < toPosition) {
-
             for (int i = fromPosition; i < toPosition; i++) {
-
-                Collections.swap(tracks, i, i + 1);
+                repository.swap(i, i + 1);
             }
         } else {
-
             for (int i = fromPosition; i > toPosition; i--) {
-
-                Collections.swap(tracks, i, i - 1);
+                repository.swap(i, i-1);
             }
         }
         notifyItemMoved(fromPosition, toPosition);
         return true;
     }
-
-
 
 
     @Override
