@@ -85,8 +85,6 @@
             android:layout_height="match_parent"
             android:alpha="@string/alpha"
             android:background="@drawable/ovalbutton"
-            android:backgroundTint="#72C7E1"
-            android:color="#c4c4c4"
             android:text="@string/minus5"
             android:textColor="@color/black"
             android:layout_weight="@integer/weight_of_button"/>
@@ -96,14 +94,14 @@
             android:layout_weight="@integer/weight_of_space"/>
         <Button
             android:id="@+id/bn10m"
-            style="@style/ExoMediaButton"
             android:layout_width="70dp"
             android:layout_height="match_parent"
             android:alpha="@string/alpha"
-            android:background="@drawable/ovalbutton"
             android:text="@string/minus10"
             android:textColor="@color/black"
-            android:layout_weight="@integer/weight_of_button"/>
+            android:layout_weight="@integer/weight_of_button"
+            android:background="@drawable/ovalbutton"/>
+
         <Space
             android:layout_height="match_parent"
             android:layout_width="match_parent"
@@ -200,7 +198,8 @@
                 <EditText
                     android:id="@+id/editTextNumber"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:cursorVisible="false"
                     android:inputType="number"
                     android:text="123"
@@ -211,30 +210,48 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.8"
                     android:gravity="center">
 
-                    <TextView
+                    <Button
                         android:id="@+id/count1"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:text="@string/count"
-                        android:textSize="50sp" />
+                        android:layout_marginStart="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_weight="1"
+                        android:textSize="40sp"
+                        android:background="#0000"
+                        android:textColor="@color/black"/>
 
                     <TextView
                         android:id="@+id/textView"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.4"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="3dp"
                         android:layout_height="match_parent"
-                        android:gravity="center_horizontal"
+                        android:gravity="center"
                         android:text="@string/slash"
-                        android:textSize="50sp" />
+                        android:textColor="@color/black"
+                        android:textSize="40sp" />
 
-                    <TextView
+                    <Button
                         android:id="@+id/count2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginEnd="10dp"
                         android:layout_height="match_parent"
+                        android:gravity="center"
                         android:text="@string/count"
-                        android:textSize="50sp" />
+                        android:background="#0000"
+                        android:textColor="@color/black"
+                        android:textSize="40sp" />
 
                 </LinearLayout>
 

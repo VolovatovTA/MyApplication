@@ -70,8 +70,7 @@ public class UserModel_Track {
             });
 
 
-        }
-        else{
+        } else {
             tracks = new ArrayList<>();
         }
 
@@ -86,48 +85,42 @@ public class UserModel_Track {
         try {
             ContentValues cv = new ContentValues();
 
-            for (int i = position; i < tracks.size(); i++){
+            for (int i = position; i < tracks.size(); i++) {
                 cv.put(DBHelper.KEY_POSITION, i);
                 id = tracks.get(i).id;
                 database.update(DBHelper.TABLE_TRACKS, cv, "id = ?", new String[]{id + ""});
             }
 
             database.setTransactionSuccessful();
-        }finally {
+        } finally {
             database.endTransaction();
         }
         Log.d(TAG, "Track was delete... Id = " + id);
     }
 
     public void swap(int fromPos, int toPos) {
-
-        Log.d(TAG, "tracks.fromPos = " + tracks.get(fromPos).position + "; tracks.toPos = " + tracks.get(toPos).position);
-
         ContentValues cv_from = new ContentValues();
         ContentValues cv_to = new ContentValues();
 
         cv_from.put(DBHelper.KEY_POSITION, fromPos);
         cv_to.put(DBHelper.KEY_POSITION, toPos);
 
-
         int id_fromPos = tracks.get(fromPos).id;
         int id_toPos = tracks.get(toPos).id;
-        Log.d(TAG, "id_from = " + id_fromPos + "; id_to = " + id_toPos);
         database.beginTransaction();
         try {
-            database.update(DBHelper.TABLE_TRACKS, cv_to, "id = ?",  new String[]{id_fromPos + ""});
+            database.update(DBHelper.TABLE_TRACKS, cv_to, "id = ?", new String[]{id_fromPos + ""});
             database.update(DBHelper.TABLE_TRACKS, cv_from, "id = ?", new String[]{id_toPos + ""});
             database.setTransactionSuccessful();
-        } finally { database.endTransaction();}
-
-
+        } finally {
+            database.endTransaction();
+        }
         Collections.swap(tracks, fromPos, toPos);
-
     }
 
     public void close() {
         database.close();
-
+        cursor.close();
     }
 
     public void putTrack(Track track) {
@@ -137,12 +130,11 @@ public class UserModel_Track {
                 track.position = tracks.size();
                 // ides started from 0
                 int[] id = new int[tracks.size()];
-                for (int i = 0; i < tracks.size(); i++){
+                for (int i = 0; i < tracks.size(); i++) {
                     id[i] = tracks.get(i).id;
                 }
                 track.id = max(id) + 1;
-            }
-            else {
+            } else {
                 track.position = 0;
                 // ides started from 0
                 track.id = 0;

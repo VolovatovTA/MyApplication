@@ -57,27 +57,21 @@ public class Saver extends AppCompatActivity implements View.OnClickListener {
         cancel = findViewById(R.id.cancel_button);
         cancel.setOnClickListener(this);
 
-
-
     }
 
     @Override
     public void onClick(View view) {
 
-
-
         String name_of_track = name.getText().toString();
 
-        if (view.getId() == R.id.saveLIST){
+        if (view.getId() == R.id.saveLIST) {
             Log.d(TAG, name.getText().toString());
-
 
 
             Repository.getInstance().putTrack(new Track(name_of_track, (int) freq, isAccentOn, count1, count2, -1, -1));
 
             this.finish();
-        }
-        else if (view.getId() == R.id.cancel_button) {
+        } else if (view.getId() == R.id.cancel_button) {
             this.finish();
         }
     }

@@ -1,6 +1,9 @@
 package com.example.myapplication.database;
 
 import android.content.Context;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.example.myapplication.UserModel_Track;
 
@@ -21,10 +24,12 @@ public final class Repository {
         return instance;
     }
 
-    public Track getItemById(int id, Context context){
-        Track track = getFromDataBase(context).get(id);
-        return track;
-    }
+//    @RequiresApi(api = Build.VERSION_CODES.N)
+//    public Track getItemById(int id, Context context){
+//        Track track = getFromDataBase(context).get(id);
+//        return track;
+//    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public ArrayList<Track> getFromDataBase(Context context) {
 
         return model.getTracks(context);
@@ -49,4 +54,6 @@ public final class Repository {
     public void putTrack(Track track) {
         model.putTrack(track);
     }
+
+    public void close() {model.close();}
 }
