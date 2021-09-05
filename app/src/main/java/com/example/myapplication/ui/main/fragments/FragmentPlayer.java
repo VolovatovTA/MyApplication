@@ -32,6 +32,15 @@ import com.example.myapplication.ui.main.Saver;
 import com.example.myapplication.view.VerticalSeekBar;
 import com.google.android.material.slider.Slider;
 
+import java.util.Arrays;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
+
 
 public class FragmentPlayer extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SoundPool.OnLoadCompleteListener, ServiceConnection, SeekBar.OnSeekBarChangeListener, TextView.OnEditorActionListener {
 
@@ -130,29 +139,36 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
         };
 
         return rootView;
+
     }
 
 
+    long ms = 0;
+    long[] intervals = new long[5];
+    int i = 1;
+    int interval;
+    int times = 0;
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onClick(View v) {
 
+        if (v.getId() == R.id.bn1m) {verticalSeekBar.setProgress(verticalSeekBar.getProgress() - 1);}
+        else if (v.getId() == R.id.bn5m) {verticalSeekBar.setProgress(verticalSeekBar.getProgress() - 5);}
+        else if (v.getId() == R.id.bn10m) {verticalSeekBar.setProgress(verticalSeekBar.getProgress() - 10);}
+        else if (v.getId() == R.id.bn1p) {verticalSeekBar.setProgress(verticalSeekBar.getProgress() + 1);}
+        else if (v.getId() == R.id.bn5p) {verticalSeekBar.setProgress(verticalSeekBar.getProgress() + 5);}
+        else if (v.getId() == R.id.bn10p) {verticalSeekBar.setProgress(verticalSeekBar.getProgress() + 10);}
+        else if (v.getId() == R.id.tap) {
+            if (times != 0) {intervals[i - 1] = System.currentTimeMillis() - ms;
+            interval = (int) LongStream.of(intervals).sum()/(times);}
+            Log.d(TAG, "i = " + i + "; interval = " + interval);
+            if (ms != 0) verticalSeekBar.setProgress(60000/interval);
+            ms = System.currentTimeMillis();
+            i = i < 4 ? i + 1: 1;
+            times = times < 4 ? times + 1: 4;
 
-
-        if (v.getId() == R.id.bn1m) {
-            verticalSeekBar.setProgress(verticalSeekBar.getProgress() - 1);
-        } else if (v.getId() == R.id.bn5m) {
-            verticalSeekBar.setProgress(verticalSeekBar.getProgress() - 5);
-        } else if (v.getId() == R.id.bn10m) {
-            verticalSeekBar.setProgress(verticalSeekBar.getProgress() - 10);
-        } else if (v.getId() == R.id.bn1p) {
-            verticalSeekBar.setProgress(verticalSeekBar.getProgress() + 1);
-        } else if (v.getId() == R.id.bn5p) {
-            verticalSeekBar.setProgress(verticalSeekBar.getProgress() + 5);
-        } else if (v.getId() == R.id.bn10p) {
-            verticalSeekBar.setProgress(verticalSeekBar.getProgress() + 10);
-        } else if (v.getId() == R.id.tap) {
-            millis = System.currentTimeMillis();
-        } else if (v.getId() == R.id.saveList) {
+        }
+        else if (v.getId() == R.id.saveList) {
             Intent intent = new Intent(getActivity(), Saver.class);
             intent.putExtra("temp", verticalSeekBar.getProgress());
             intent.putExtra("accent", compoundButton_accent.isChecked());
@@ -163,6 +179,9 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
             ;
         }
     }
+
+
+
 
     @SuppressLint("NonConstantResourceId")
     @Override
