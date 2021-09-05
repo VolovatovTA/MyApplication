@@ -8,19 +8,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.util.Log;
-import android.view.SurfaceControl;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.myapplication.adapters.Notifyer;
 import com.example.myapplication.database.DBHelper;
 import com.example.myapplication.database.Track;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-
-import io.reactivex.rxjava3.core.Observable;
 
 public class UserModel_Track {
     private static final String TAG = "Timofey";

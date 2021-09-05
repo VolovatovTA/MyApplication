@@ -83,6 +83,7 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
 
 
         Notification notification = createNotification();
+        startForeground(333, notification);
 
 
         return START_STICKY;
@@ -123,9 +124,11 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
         Log.d(TAG, "MyService onBind");
         return binder;
     }
+    long ms;
 
     @Override
     public void run() {
+
         while (isPlaying){
             sp.play(soundId1,1,1,1,0,1);
             try {
@@ -145,9 +148,10 @@ public class MetronomeService extends Service implements SoundPool.OnLoadComplet
 
     public void play() {
         t = new Thread(this);
-//        t.setPriority(Thread.MAX_PRIORITY);
+        t.setPriority(Thread.MAX_PRIORITY);
         isPlaying = true;
         t.start();
+
 
 
     }
