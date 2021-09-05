@@ -154,6 +154,8 @@ public class UserModel_Track {
         contentValues.put(DBHelper.KEY_ID, track.id);
         contentValues.put(DBHelper.KEY_POSITION, track.position);
 
+        Log.d(TAG, "count1 in PutTrack = " + track.count1);
+
         tracks.add(track);
         database.insert(DBHelper.TABLE_TRACKS, null, contentValues);
     }

@@ -44,9 +44,10 @@ public class Saver extends AppCompatActivity implements View.OnClickListener {
 
         Intent intent = getIntent();
 
-        freq = intent.getLongExtra("temp", 90);
+        freq = intent.getIntExtra("temp", 90);
         isAccentOn = intent.getBooleanExtra("accent", false);
         count1 = intent.getIntExtra("number_sounds", 4);
+        Log.d(TAG, "count1 = " + count1);
         count2 = intent.getIntExtra("number_share", 4);
 
 
@@ -66,10 +67,8 @@ public class Saver extends AppCompatActivity implements View.OnClickListener {
 
         if (view.getId() == R.id.saveLIST) {
             Log.d(TAG, name.getText().toString());
-
-
+            Log.d(TAG, "count1 = " + count1);
             Repository.getInstance().putTrack(new Track(name_of_track, (int) freq, isAccentOn, count1, count2, -1, -1));
-
             this.finish();
         } else if (view.getId() == R.id.cancel_button) {
             this.finish();

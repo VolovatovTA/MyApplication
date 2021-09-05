@@ -1,12 +1,15 @@
 package com.example.myapplication.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
@@ -16,7 +19,6 @@ import com.example.myapplication.ui.main.fragments.FragmentList;
 import com.example.myapplication.view.RecyclerViewHolder;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerViewHolder> implements ItemTouchHelperAdapter {
 
@@ -26,6 +28,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     Context context;
     ArrayList<Track> tracks;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public RecyclerListAdapter(Context context) {
         this.context = context;
         tracks = repository.getFromDataBase(context);
@@ -74,8 +77,15 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
-        if (tracks == null) holder.getView().setText("nema");
-        else holder.getView().setText(tracks.get(position).name);
+        if (tracks == null) {}
+        else {
+            holder.getName().setText(tracks.get(position).name);
+
+            holder.getTemp().setText(Integer.toString(tracks.get(position).temp));
+            holder.getCount1().setText(Integer.toString(tracks.get(position).count1));
+            holder.getCount2().setText(Integer.toString(tracks.get(position).count2));
+            holder.getAcc().setText(tracks.get(position).acc ? "ON" : "Off");
+        }
 
 
     }

@@ -14,11 +14,14 @@ import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -52,8 +55,8 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
     Button btn_1p;
     Button btn_5p;
     Button btn_10p;
-    Button count1;
-    Button count2;
+    Spinner count1;
+    Spinner count2;
     Button tap;
     Button saveInList;
     Intent intent;
@@ -118,10 +121,26 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
         btn_5p.setOnClickListener(this);
         btn_10p.setOnClickListener(this);
         tap.setOnClickListener(this);
-        count1.setOnClickListener(this);
-        count2.setOnClickListener(this);
+//        count1.setOnClickListener(this);
+//        count2.setOnClickListener(this);
         saveInList.setOnClickListener(this);
         intent = new Intent(getContext(), MetronomeService.class);
+        String[] chose_of_count1 = {"2", "4", "6", "8", "12", "16"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, chose_of_count1);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        count1.setAdapter(adapter);
+        count2.setAdapter(adapter);
+//        count1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                Log.d(TAG, "number = " + count1.getItemAtPosition(i).toString() + " number beats");
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
         getActivity().startService(intent);
 
         sConn = new ServiceConnection() {
@@ -172,11 +191,9 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
             Intent intent = new Intent(getActivity(), Saver.class);
             intent.putExtra("temp", verticalSeekBar.getProgress());
             intent.putExtra("accent", compoundButton_accent.isChecked());
-            intent.putExtra("number_share", 4);
-            intent.putExtra("number_sounds", 4);
+            intent.putExtra("number_sounds", Integer.parseInt(count1.getSelectedItem().toString()));
+            intent.putExtra("number_share",  Integer.parseInt(count2.getSelectedItem().toString()));
             startActivity(intent);
-        } else if (v.getId() == R.id.count1){
-            ;
         }
     }
 
@@ -186,6 +203,7 @@ public class FragmentPlayer extends Fragment implements View.OnClickListener, Co
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
 
         switch (buttonView.getId()) {
             case R.id.play:
