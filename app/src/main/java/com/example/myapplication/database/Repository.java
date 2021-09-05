@@ -2,6 +2,7 @@ package com.example.myapplication.database;
 
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -52,6 +53,8 @@ public final class Repository {
     }
 
     public void putTrack(Track track) {
+        Log.d(TAG, "count1 = " + track.count1);
+
         model.putTrack(track);
     }
 
